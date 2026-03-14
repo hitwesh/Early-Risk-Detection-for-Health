@@ -7,6 +7,15 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 10:45am (Added by Hitesh)
+
+### Added
+- Created the combined diagnosis pipeline to connect the question engine with the trained disease predictor.
+- Added an interactive diagnosis test script to run the end-to-end question flow and prediction output.
+
+### Changed
+- Aligned the diagnosis pipeline model input size with the embedding-augmented feature vector to prevent checkpoint shape mismatches.
+
 ## 2026-03-14 10:31am (Added by Hitesh)
 
 ### Added
