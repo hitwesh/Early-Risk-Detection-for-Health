@@ -7,6 +7,20 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 05:51pm (Added by Hitesh)
+
+### Changed
+- Added bcrypt password length validation to reject passwords longer than 72 bytes.
+
+### Added
+- Added authentication core utilities for password hashing and JWT creation.
+- Added user model, schemas, repository, and service for registration and login.
+- Added auth API routes and wired them into the FastAPI app.
+- Added automatic table creation for the user model during startup.
+
+### Changed
+- Updated the backend entry point to include auth routing.
+
 ## 2026-03-14 05:40pm (Added by Hitesh)
 
 ### Added
