@@ -166,6 +166,7 @@ def run_diagnosis(X, y, symptom_names, patient=None, use_bayes_engine=False):
 	max_questions = 12
 	min_cases = 100
 	confidence_stop = 0.90
+	bayesian_switch_threshold = 50000
 
 	start_total = time.time()
 
@@ -178,14 +179,20 @@ def run_diagnosis(X, y, symptom_names, patient=None, use_bayes_engine=False):
 
 		iter_start = time.time()
 		entropy_start = time.time()
-		if use_bayes_engine and bayes_matrix is not None:
+		engine = "entropy"
+		if use_bayes_engine and bayes_matrix is not None and len(X) > bayesian_switch_threshold:
+			engine = "bayesian"
+
+		if engine == "bayesian":
 			if len(X) > 50000:
 				top_k = 25
 			elif len(X) > 10000:
 				top_k = 40
 			else:
 				top_k = 80
+			start_bayes = time.time()
 			idx = select_next_symptom(bayes_probs, bayes_matrix, asked, top_k=top_k)
+			bayes_time = time.time() - start_bayes
 			if idx is None:
 				break
 			question = symptom_names[idx]
@@ -215,7 +222,11 @@ def run_diagnosis(X, y, symptom_names, patient=None, use_bayes_engine=False):
 		iter_end = time.time()
 		entropy_time = entropy_end - entropy_start
 		filter_time = filter_end - filter_start
-		print(f"[Step {step}] Entropy: {entropy_time:.2f}s | Filter: {filter_time:.2f}s")
+		print(f"[Engine] Using {engine.upper()} engine")
+		if engine == "bayesian":
+			print(f"[Step {step}] Bayesian score: {bayes_time:.4f}s | Filter: {filter_time:.2f}s")
+		else:
+			print(f"[Step {step}] Entropy: {entropy_time:.2f}s | Filter: {filter_time:.2f}s")
 		print(f"Iteration {step} took {iter_end - iter_start:.2f} seconds")
 
 		base_vector = build_symptom_vector(user_symptoms, symptom_names, symptom_index)

@@ -7,6 +7,13 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+
+## 2026-03-14 01:54pm (Added by Hitesh)
+
+### Changed
+- Added automatic Bayesian-to-entropy engine switching based on remaining dataset size, with per-step timing output.
+
+
 ## 2026-03-14 01:30pm (Added by Hitesh)
 
 ### Changed
