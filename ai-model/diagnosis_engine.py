@@ -137,6 +137,8 @@ def run_diagnosis(X, y, symptom_names):
 	user_symptoms = []
 
 	for _ in range(6):
+		if len(X) < 200:
+			break
 		question, idx = next_best_question(X, y, symptom_names, asked)
 
 		print("\nDo you have:", question)

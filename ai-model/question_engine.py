@@ -1,6 +1,4 @@
 import numpy as np
-import pandas as pd
-from collections import defaultdict
 
 
 def entropy(labels):
@@ -38,7 +36,8 @@ def rank_symptoms(X, y, asked_symptoms=None):
 
     scores = {}
 
-    candidate_symptoms = np.where(X.sum(axis=0) > 0)[0]
+    symptom_counts = X.sum(axis=0)
+    candidate_symptoms = np.where(symptom_counts > 0)[0]
 
     for i in candidate_symptoms:
         if i in asked_symptoms:
@@ -61,9 +60,6 @@ def next_best_question(X, y, symptom_names, asked_symptoms):
 
 
 def update_dataset(X, y, symptom_index, answer):
-    if answer == 1:
-        mask = X[:, symptom_index] == 1
-    else:
-        mask = X[:, symptom_index] == 0
+    mask = X[:, symptom_index] == answer
 
     return X[mask], y[mask]

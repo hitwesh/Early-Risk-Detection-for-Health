@@ -18,6 +18,8 @@ node_modules/
 
 # datasets
 datasets/raw/
+*.npy
+dataset.csv
 
 # docker
 *.tar

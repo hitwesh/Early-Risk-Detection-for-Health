@@ -183,6 +183,16 @@ project-root
 `-- architecture.md
 ```
 
+## Dataset Setup
+
+The dataset and generated numpy arrays are not tracked in git. Place the CSV under
+`datasets/raw/` and run the cache builder to generate `X.npy`, `y.npy`, and
+`symptom_names.npy` locally:
+
+```bash
+python -c "from dataset_cache import load_cached_dataset; load_cached_dataset()"
+```
+
 ## Security Features
 
 - JWT Authentication

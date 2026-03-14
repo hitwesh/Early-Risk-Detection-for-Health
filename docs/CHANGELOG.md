@@ -7,6 +7,22 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 11:14am (Added by Hitesh)
+
+### Added
+- Documented dataset setup and local cache generation in README without committing raw data or numpy artifacts.
+
+### Changed
+- Updated .gitignore to exclude generated numpy arrays and local dataset CSVs from version control.
+
+### Added
+- Added a dataset cache utility to store and load X, y, and symptom names as numpy arrays for faster startup.
+
+### Changed
+- Updated question engine and diagnosis tests to load cached arrays instead of re-reading the full CSV on every run.
+- Precomputed symptom counts for candidate selection and simplified dataset filtering to speed up entropy scans.
+- Added early stopping in the diagnosis flow when remaining cases fall below the threshold.
+
 ## 2026-03-14 11:00am (Added by Hitesh)
 
 ### Changed
