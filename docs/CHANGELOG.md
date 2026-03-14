@@ -7,6 +7,14 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 05:28 (Added by Hitesh)
+
+### Changed
+- Expanded backend Roadmap.sh with version header, migration strategy, API versioning, testing milestone, security hardening notes, and CI/CD coverage.
+
+### Added
+- Added backend Roadmap.sh with detailed milestone plan and acceptance criteria.
+
 ## 2026-03-14 05:20pm (Added by Hitesh)
 
 ### Added
