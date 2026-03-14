@@ -79,6 +79,10 @@ Key contributing symptoms:
 - cough
 - shortness of breath
 
+### 5) Risk Factor Weighting
+
+Predictions are refined using patient context (for example age, BMI, blood pressure, smoking, and history flags) to adjust disease probabilities in a clinically realistic way.
+
 ## AI Model
 
 The core prediction engine is built with PyTorch.

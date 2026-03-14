@@ -8,6 +8,7 @@ from sklearn.preprocessing import StandardScaler
 
 from question_engine import next_best_question, update_dataset
 from model import DiseasePredictor
+from risk_factors import apply_risk_factor_weights
 
 
 def load_model(input_size):
@@ -73,12 +74,13 @@ def explain_prediction(model, base_vector, symptom_names):
 	return explanations[:3]
 
 
-def predict_diseases(model, symptom_vector, disease_labels, symptom_names, base_vector):
+def predict_diseases(model, symptom_vector, disease_labels, symptom_names, base_vector, patient):
 	with torch.no_grad():
 		outputs = model(symptom_vector)
 		probs = torch.softmax(outputs, dim=1)
 
-	probs = probs.numpy()[0]
+	probs = probs.cpu().numpy()[0]
+	probs = apply_risk_factor_weights(probs, disease_labels, patient)
 
 	top_indices = np.argsort(probs)[-5:][::-1]
 
@@ -125,7 +127,7 @@ def bayesian_update(predictions, remaining_labels):
 	return updated
 
 
-def run_diagnosis(X, y, symptom_names):
+def run_diagnosis(X, y, symptom_names, patient=None):
 	embeddings = np.load("symptom_embeddings.npy")
 	augmented_X = add_embedding_features(X, embeddings)
 
@@ -178,7 +180,10 @@ def run_diagnosis(X, y, symptom_names):
 	symptom_vector = torch.tensor(augmented_vector, dtype=torch.float32)
 
 	model_start = time.time()
-	results = predict_diseases(model, symptom_vector, disease_labels, symptom_names, base_vector)
+	if patient is None:
+		patient = {}
+
+	results = predict_diseases(model, symptom_vector, disease_labels, symptom_names, base_vector, patient)
 	results = bayesian_update(results, y)
 	model_end = time.time()
 	print(f"Model inference: {model_end - model_start:.4f}s")
@@ -190,6 +195,12 @@ def run_diagnosis(X, y, symptom_names):
 		print("Key contributing symptoms:")
 		for s in r["explanation"]:
 			print("-", s)
+
+	active_risks = [k for k, v in patient.items() if v]
+	if active_risks:
+		print("\nRisk factors considered:")
+		for k in active_risks:
+			print("-", k)
 
 	end_total = time.time()
 	print(f"\nTotal diagnosis time: {end_total - start_total:.2f} seconds")

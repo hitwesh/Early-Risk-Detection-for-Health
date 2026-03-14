@@ -7,6 +7,21 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 12:00pm (Added by Hitesh)
+
+### Changed
+- Added interactive prompts for patient context (age, BMI, blood pressure, and history flags) in the diagnosis test runner.
+
+### Added
+- Added risk factor weighting to refine disease probabilities using patient context.
+- Added a risk factor utility module and a sample patient profile in the diagnosis test runner.
+
+### Changed
+- Updated the diagnosis pipeline to apply risk-based probability adjustments and report active risk factors.
+
+### Changed
+- Documented risk factor weighting in the README.
+
 ## 2026-03-14 11:30am (Added by Hitesh)
 
 ### Changed
