@@ -7,6 +7,19 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 07:23pm (Added by Hitesh)
+
+### Changed
+- Aligned diagnosis inference with training features using symptom embeddings and scaler normalization.
+
+### Changed
+- Implemented diagnosis inference using cached model artifacts and risk-factor weighting.
+
+### Added
+- Added backend AI module structure with dataset cache, bayesian engine, symptom engine, and model loader.
+- Added diagnosis engine wrapper and diagnosis request/response schemas.
+- Added diagnosis prediction endpoint and routed it through the FastAPI app.
+
 ## 2026-03-14 06:41pm (Added by Hitesh)
 
 ### Changed
