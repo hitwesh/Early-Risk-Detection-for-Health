@@ -7,7 +7,19 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
-## 2026-03-14 05:28 (Added by Hitesh)
+## 2026-03-14 05:40pm (Added by Hitesh)
+
+### Added
+- Added core backend infrastructure modules for config, logging, database engine/base, and database dependency injection.
+- Added backend logs folder for file-based logging output.
+
+### Changed
+- Updated backend entry point to use environment settings and structured startup logging.
+
+### Added
+- Added loguru and pydantic-settings to backend requirements for logging and settings management.
+
+## 2026-03-14 05:28pm (Added by Hitesh)
 
 ### Changed
 - Expanded backend Roadmap.sh with version header, migration strategy, API versioning, testing milestone, security hardening notes, and CI/CD coverage.
