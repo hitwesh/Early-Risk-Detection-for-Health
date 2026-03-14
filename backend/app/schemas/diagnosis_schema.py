@@ -13,3 +13,9 @@ class DiagnosisRequest(BaseModel):
 class DiagnosisResponse(BaseModel):
 	diseases: list[str]
 	probabilities: list[float]
+
+
+class DiagnosisAnswerRequest(BaseModel):
+	session_id: str
+	symptom: str
+	answer: bool

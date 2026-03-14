@@ -7,6 +7,19 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 (Added by Hitesh)
+
+### Changed
+- Trimmed backend requirements.txt to only the packages used by the current backend code.
+
+## 2026-03-14 (Added by Hitesh)
+
+### Added
+- Added interactive diagnosis session storage and endpoints for start, answer, and result.
+
+### Changed
+- Added vector-based diagnosis inference for session results.
+
 ## 2026-03-14 07:37pm (Added by Hitesh)
 
 ### Changed

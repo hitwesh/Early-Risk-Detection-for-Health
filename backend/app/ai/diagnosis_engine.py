@@ -27,15 +27,12 @@ def _add_embedding_features(base_vector, embeddings):
 	return np.concatenate([base_vector, embedding_vec], axis=0)
 
 
-def run_diagnosis(symptoms, risk_factors):
-	artifacts = get_model()
+def _predict_from_base_vector(base_vector, artifacts, risk_factors):
 	model = artifacts.model
-	symptom_names = artifacts.symptom_names
 	disease_labels = artifacts.disease_labels
 	embeddings = artifacts.embeddings
 	scaler = artifacts.scaler
 
-	base_vector = _build_base_vector(symptoms, symptom_names)
 	features = _add_embedding_features(base_vector, embeddings)
 	features = scaler.transform([features])[0]
 
@@ -60,3 +57,28 @@ def run_diagnosis(symptoms, risk_factors):
 		"diseases": diseases,
 		"probabilities": probabilities,
 	}
+
+
+def run_diagnosis(symptoms, risk_factors):
+	artifacts = get_model()
+	symptom_names = artifacts.symptom_names
+	base_vector = _build_base_vector(symptoms, symptom_names)
+	return _predict_from_base_vector(base_vector, artifacts, risk_factors)
+
+
+def predict_from_vector(symptom_vector, risk_factors=None):
+	artifacts = get_model()
+	if risk_factors is None:
+		risk_factors = {}
+
+	base_vector = np.array(symptom_vector, dtype=float)
+	if base_vector.shape[0] < len(artifacts.symptom_names):
+		base_vector = np.pad(
+			base_vector,
+			(0, len(artifacts.symptom_names) - base_vector.shape[0]),
+			constant_values=0.0,
+		)
+	elif base_vector.shape[0] > len(artifacts.symptom_names):
+		base_vector = base_vector[: len(artifacts.symptom_names)]
+
+	return _predict_from_base_vector(base_vector, artifacts, risk_factors)
