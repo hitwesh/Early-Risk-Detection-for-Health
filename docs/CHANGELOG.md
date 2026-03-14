@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 2:16am (Added by Debadrita)
+
+### Added
+- Implemented frontend authentication with Register and Login pages using JWT storage in localStorage.
+- Protected diagnosis, results, and dashboard routes using a ProtectedRoute gate.
+
 ## 2026-03-15 12:10am (Added by Debadrita)
 
 ### Changed
