@@ -8,6 +8,7 @@ from sklearn.preprocessing import StandardScaler
 
 from question_engine import next_best_question, update_dataset
 from model import DiseasePredictor
+from disease_prior import apply_disease_prior
 from risk_factors import apply_risk_factor_weights
 
 
@@ -80,13 +81,20 @@ def predict_diseases(model, symptom_vector, disease_labels, symptom_names, base_
 		probs = torch.softmax(outputs, dim=1)
 
 	raw_probs = probs.cpu().numpy()[0]
-	probs = apply_risk_factor_weights(raw_probs, disease_labels, patient)
+	risk_probs = apply_risk_factor_weights(raw_probs, disease_labels, patient)
+	probs = apply_disease_prior(risk_probs, disease_labels)
 
 	if patient.get("debug_risk"):
 		print("\nDEBUG: Probability change from risk factors\n")
 		for i in np.argsort(raw_probs)[-5:][::-1]:
 			print(
-				f"{disease_labels[i]} | before: {raw_probs[i]*100:.2f}% -> after: {probs[i]*100:.2f}%"
+				f"{disease_labels[i]} | before: {raw_probs[i]*100:.2f}% -> after: {risk_probs[i]*100:.2f}%"
+			)
+
+		print("\nDEBUG: Probability change from disease priors\n")
+		for i in np.argsort(risk_probs)[-5:][::-1]:
+			print(
+				f"{disease_labels[i]} | before: {risk_probs[i]*100:.2f}% -> after: {probs[i]*100:.2f}%"
 			)
 
 	top_indices = np.argsort(probs)[-5:][::-1]

@@ -83,6 +83,10 @@ Key contributing symptoms:
 
 Predictions are refined using patient context (for example age, BMI, blood pressure, smoking, and history flags) to adjust disease probabilities in a clinically realistic way.
 
+### 6) Disease Priors
+
+Predictions are also adjusted by lightweight disease priors (common vs rare conditions) to better reflect real-world prevalence.
+
 ## AI Model
 
 The core prediction engine is built with PyTorch.

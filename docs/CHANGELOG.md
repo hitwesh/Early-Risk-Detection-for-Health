@@ -7,6 +7,17 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 12:36pm (Added by Hitesh)
+
+### Added
+- Added disease prior weighting to adjust probabilities based on common vs rare conditions.
+
+### Changed
+- Updated diagnosis pipeline to apply disease priors after risk factor weighting and emit debug comparisons.
+
+### Changed
+- Documented disease priors in the README.
+
 ## 2026-03-14 12:20pm (Added by Hitesh)
 
 ### Changed
