@@ -7,6 +7,11 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 06:41pm (Added by Hitesh)
+
+### Changed
+- Updated auth register response to omit password fields from API output.
+
 ## 2026-03-14 06:39pm (Added by Hitesh)
 
 ### Changed
