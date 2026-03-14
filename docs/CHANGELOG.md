@@ -7,6 +7,11 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 07:37pm (Added by Hitesh)
+
+### Changed
+- Enforced diagnosis input validation for minimum symptoms and sensible age/BMI ranges.
+
 ## 2026-03-14 07:23pm (Added by Hitesh)
 
 ### Changed
