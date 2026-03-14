@@ -8,5 +8,6 @@ X, y, symptom_names = load_cached_dataset()
 
 patient = get_patient_profile()
 patient["debug_risk"] = ask_yes_no("Show risk-factor debug (y/n): ")
+use_bayes_engine = ask_yes_no("Use Bayesian question engine (y/n): ")
 
-run_diagnosis(X, y, symptom_names, patient)
+run_diagnosis(X, y, symptom_names, patient, use_bayes_engine=use_bayes_engine)

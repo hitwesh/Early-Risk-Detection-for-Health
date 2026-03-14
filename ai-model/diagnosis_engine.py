@@ -7,6 +7,7 @@ import torch
 from sklearn.preprocessing import StandardScaler
 
 from question_engine import next_best_question, update_dataset
+from bayesian_engine import build_symptom_disease_matrix, initialize_probs, select_next_symptom, update_probabilities
 from model import DiseasePredictor
 from disease_prior import apply_disease_prior
 from risk_factors import apply_risk_factor_weights
@@ -144,11 +145,17 @@ def bayesian_update(predictions, remaining_labels):
 	return updated
 
 
-def run_diagnosis(X, y, symptom_names, patient=None):
+def run_diagnosis(X, y, symptom_names, patient=None, use_bayes_engine=False):
 	embeddings = np.load("symptom_embeddings.npy")
 	augmented_X = add_embedding_features(X, embeddings)
 
 	model, symptom_index, disease_labels = load_model(augmented_X.shape[1])
+
+	bayes_matrix = None
+	bayes_probs = None
+	if use_bayes_engine:
+		bayes_matrix = build_symptom_disease_matrix(X, y, disease_labels, symptom_names)
+		bayes_probs = initialize_probs(len(disease_labels))
 
 	scaler = StandardScaler()
 	scaler.fit(augmented_X)
@@ -171,8 +178,20 @@ def run_diagnosis(X, y, symptom_names, patient=None):
 
 		iter_start = time.time()
 		entropy_start = time.time()
-		symptom_counts = X.sum(axis=0)
-		question, idx = next_best_question(X, y, symptom_names, asked, symptom_counts)
+		if use_bayes_engine and bayes_matrix is not None:
+			if len(X) > 50000:
+				top_k = 25
+			elif len(X) > 10000:
+				top_k = 40
+			else:
+				top_k = 80
+			idx = select_next_symptom(bayes_probs, bayes_matrix, asked, top_k=top_k)
+			if idx is None:
+				break
+			question = symptom_names[idx]
+		else:
+			symptom_counts = X.sum(axis=0)
+			question, idx = next_best_question(X, y, symptom_names, asked, symptom_counts)
 		entropy_end = time.time()
 
 		print("\nDo you have:", question)
@@ -187,6 +206,9 @@ def run_diagnosis(X, y, symptom_names, patient=None):
 		X, y = update_dataset(X, y, idx, answer)
 		filter_end = time.time()
 		asked.add(idx)
+
+		if use_bayes_engine and bayes_probs is not None:
+			bayes_probs = update_probabilities(bayes_probs, idx, answer == 1, bayes_matrix)
 
 		print("Remaining cases:", len(X))
 

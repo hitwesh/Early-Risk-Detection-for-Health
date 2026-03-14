@@ -7,6 +7,17 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 01:30pm (Added by Hitesh)
+
+### Changed
+- Fixed a syntax error in the optional Bayesian question engine implementation.
+
+### Added
+- Added an optional Bayesian question engine operating in disease-space to speed up symptom selection.
+
+### Changed
+- Wired the diagnosis runner to select between row-based and Bayesian questioning.
+
 ## 2026-03-14 01:19pm (Added by Hitesh)
 
 ### Changed
