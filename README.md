@@ -222,6 +222,6 @@ Users should consult qualified healthcare professionals for medical advice.
 
 ## Team
 
-MedTech Hackathon Project
+Built by CTRC-C & CTRL-V
 
 Built with care using AI and healthcare innovation.
