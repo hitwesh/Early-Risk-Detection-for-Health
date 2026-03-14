@@ -7,6 +7,12 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 12:20pm (Added by Hitesh)
+
+### Changed
+- Expanded risk factor keyword matching across pulmonary, cardiac, infection, neuro, GI, renal, and cancer categories for better disease mapping.
+- Added sex- and age-based exclusion rules (e.g., ovarian vs prostate conditions) to improve clinical realism.
+
 ## 2026-03-14 12:08pm (Added by Hitesh)
 
 ### Added
