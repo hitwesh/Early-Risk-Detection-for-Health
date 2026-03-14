@@ -7,6 +7,18 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 06:39pm (Added by Hitesh)
+
+### Changed
+- Replaced auth service exceptions with HTTP errors for consistent client responses.
+
+### Added
+- Added OAuth2 bearer token decoding and current-user dependency for protected endpoints.
+- Added users route to expose the authenticated user profile.
+
+### Changed
+- Updated backend app routing to include users endpoints with tags.
+
 ## 2026-03-14 05:51pm (Added by Hitesh)
 
 ### Changed
