@@ -7,6 +7,18 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 10:31am (Added by Hitesh)
+
+### Added
+- Implemented the dynamic question engine module to rank symptoms by information gain and select the next best question.
+
+### Changed
+- Wired the question engine test harness to the actual dataset path and label column in the repo for reliable validation.
+
+### Added
+- Added an interactive test script for the question engine to validate question selection and dataset filtering.
+
+
 ## 2026-03-14 10:13am (Added by Hitesh)
 
 ### Added
