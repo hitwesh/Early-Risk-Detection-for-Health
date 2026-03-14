@@ -7,6 +7,16 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 05:16pm (Added by Hitesh)
+
+### Added
+- Added the consolidated backend app structure with api v1 routes, core, db, models, schemas, services, repositories, and ai modules.
+- Added backend placeholder files for routes, core, db, models, schemas, services, repositories, ai loader, main entrypoint, and env file.
+- Added the backend tests folder for future test coverage.
+
+### Removed
+- Removed legacy backend service folders: admin_service, auth_service, gateway, medical_service, prediction_service, shared, and user_service.
+- Removed the backend venv folder from the workspace.
 
 ## 2026-03-14 01:54pm (Added by Hitesh)
 
