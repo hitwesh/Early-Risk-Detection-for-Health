@@ -7,6 +7,12 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 05:20pm (Added by Hitesh)
+
+### Added
+- Added backend environment configuration defaults for app name, version, SQLite database URL, and model path.
+- Added a minimal FastAPI entry point with a root health response.
+
 ## 2026-03-14 05:16pm (Added by Hitesh)
 
 ### Added
