@@ -6,6 +6,37 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 12:10am (Added by Debadrita)
+
+### Changed
+- Refactored the Diagnosis page to use structured patient intake, AI question flow, progress tracking, and engine reporting instead of free-text symptoms.
+
+## 2026-03-14 11:28pm (Added by Debadrita)
+
+### Changed
+- Expanded the landing page with hero, how-it-works, and key features sections with a Start Diagnosis CTA.
+- Added follow-up question handling, loading feedback, and history storage to the Diagnosis flow.
+- Enhanced the Dashboard to display stored diagnosis history entries.
+
+## 2026-03-14 10:37pm (Added by Debadrita)
+
+### Changed
+- Applied a healthcare dashboard UI refresh with a rose gradient background, updated navigation styling, and card layouts using rounded corners and soft shadows.
+
+## 2026-03-14 10:29pm (Added by Debadrita)
+
+### Added
+- Built the Results page to render top predictions, probability percentages, a Recharts bar chart, and explainable symptom contributors from backend responses.
+
+## 2026-03-14 10:22pm (Added by Debadrita)
+
+### Changed
+- Updated the frontend Navbar links to match the required navigation routes (Home, Diagnosis, Dashboard).
+
+## 2026-03-14 09:52pm (Added by Debadrita)
+
+### Added
+- Added a Vite + React + Tailwind + React Router frontend scaffold for SymptoScan, including base routing, pages, components, and an API service stub.
 
 ## 2026-03-14 07:37pm (Added by Hitesh)
 
@@ -255,5 +286,3 @@
 - symptom_index.json
 - disease_labels.json
 - symptom_embeddings.npy
-
-
