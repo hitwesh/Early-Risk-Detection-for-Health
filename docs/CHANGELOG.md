@@ -7,6 +7,11 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 11:00am (Added by Hitesh)
+
+### Changed
+- Optimized question engine symptom ranking to evaluate only symptoms present in the remaining dataset, reducing per-question entropy work.
+
 ## 2026-03-14 10:54am (Added by Hitesh)
 
 ### Changed

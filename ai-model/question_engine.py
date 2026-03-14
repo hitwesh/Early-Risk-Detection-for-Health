@@ -38,7 +38,9 @@ def rank_symptoms(X, y, asked_symptoms=None):
 
     scores = {}
 
-    for i in range(X.shape[1]):
+    candidate_symptoms = np.where(X.sum(axis=0) > 0)[0]
+
+    for i in candidate_symptoms:
         if i in asked_symptoms:
             continue
 
