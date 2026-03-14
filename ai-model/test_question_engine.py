@@ -33,9 +33,9 @@ for i in range(6):
 
 	print("\nQuestion:", question)
 
-	answer = input("yes/no: ")
+	answer = input("yes/no: ").strip().lower()
 
-	answer = 1 if answer == "yes" else 0
+	answer = 1 if answer in ["yes", "y"] else 0
 
 	X, y = update_dataset(X, y, idx, answer)
 

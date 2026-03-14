@@ -1,4 +1,5 @@
 import json
+from collections import Counter
 
 import numpy as np
 import torch
@@ -51,7 +52,27 @@ def build_symptom_vector(symptoms, symptom_names, symptom_index):
 	return vector
 
 
-def predict_diseases(model, symptom_vector, disease_labels):
+
+def explain_prediction(model, base_vector, symptom_names):
+	weights = model.network[0].weight.detach().numpy()
+	symptom_count = len(symptom_names)
+	weights = weights[:, :symptom_count]
+
+	symptom_values = base_vector[0]
+
+	importance = np.abs(weights).mean(axis=0) * symptom_values
+	top_features = np.argsort(importance)[-5:]
+
+	explanations = []
+
+	for idx in top_features:
+		if symptom_values[idx] == 1:
+			explanations.append(symptom_names[idx])
+
+	return explanations[:3]
+
+
+def predict_diseases(model, symptom_vector, disease_labels, symptom_names, base_vector):
 	with torch.no_grad():
 		outputs = model(symptom_vector)
 		probs = torch.softmax(outputs, dim=1)
@@ -60,15 +81,47 @@ def predict_diseases(model, symptom_vector, disease_labels):
 
 	top_indices = np.argsort(probs)[-5:][::-1]
 
+	explanations = explain_prediction(model, base_vector, symptom_names)
+
 	results = []
 
 	for idx in top_indices:
 		results.append({
 			"disease": disease_labels[idx],
-			"probability": float(probs[idx])
+			"probability": float(probs[idx]),
+			"explanation": explanations
 		})
 
 	return results
+
+
+def bayesian_update(predictions, remaining_labels):
+	disease_counts = Counter(remaining_labels)
+
+	total = sum(disease_counts.values())
+
+	priors = {d: c / total for d, c in disease_counts.items()}
+
+	updated = []
+
+	for p in predictions:
+		disease = p["disease"]
+		prior = priors.get(disease, 1e-6)
+		posterior = p["probability"] * prior
+		updated.append({
+			"disease": disease,
+			"probability": posterior,
+			"explanation": p["explanation"]
+		})
+
+	norm = sum(d["probability"] for d in updated)
+
+	for d in updated:
+		d["probability"] /= norm
+
+	updated.sort(key=lambda x: x["probability"], reverse=True)
+
+	return updated
 
 
 def run_diagnosis(X, y, symptom_names):
@@ -88,8 +141,8 @@ def run_diagnosis(X, y, symptom_names):
 
 		print("\nDo you have:", question)
 
-		answer = input("yes/no: ")
-		answer = 1 if answer == "yes" else 0
+		answer = input("yes/no: ").strip().lower()
+		answer = 1 if answer in ["yes", "y"] else 0
 
 		if answer == 1:
 			user_symptoms.append(question)
@@ -107,11 +160,15 @@ def run_diagnosis(X, y, symptom_names):
 
 	symptom_vector = torch.tensor(augmented_vector, dtype=torch.float32)
 
-	results = predict_diseases(model, symptom_vector, disease_labels)
+	results = predict_diseases(model, symptom_vector, disease_labels, symptom_names, base_vector)
+	results = bayesian_update(results, y)
 
 	print("\nTop Possible Diseases:\n")
 
 	for r in results:
-		print(f"{r['disease']} -- {r['probability']:.2%}")
+		print(f"\n{r['disease']} -- {r['probability']:.2%}")
+		print("Key contributing symptoms:")
+		for s in r["explanation"]:
+			print("-", s)
 
 	return results

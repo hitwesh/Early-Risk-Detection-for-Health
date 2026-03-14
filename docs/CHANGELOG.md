@@ -7,6 +7,11 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 10:54am (Added by Hitesh)
+
+### Changed
+- Normalized yes/no input handling to accept y/yes and n/no in the diagnosis flow and question engine test.
+
 ## 2026-03-14 10:45am (Added by Hitesh)
 
 ### Added
