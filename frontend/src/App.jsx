@@ -1,9 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Landing from "./pages/Landing.jsx";
 import Diagnosis from "./pages/Diagnosis.jsx";
 import Results from "./pages/Results.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 
 const App = () => {
   return (
@@ -12,9 +15,32 @@ const App = () => {
       <main className="mx-auto w-full max-w-6xl px-6 py-8">
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/diagnosis" element={<Diagnosis />} />
-          <Route path="/results" element={<Results />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/diagnosis"
+            element={
+              <ProtectedRoute>
+                <Diagnosis />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/results"
+            element={
+              <ProtectedRoute>
+                <Results />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
     </div>
