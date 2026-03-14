@@ -39,6 +39,13 @@ def rank_symptoms(X, y, asked_symptoms=None):
     symptom_counts = X.sum(axis=0)
     candidate_symptoms = np.where(symptom_counts > 0)[0]
 
+    if candidate_symptoms.size > 0:
+        if len(X) < 5000:
+            top = np.argsort(symptom_counts[candidate_symptoms])[-20:]
+        else:
+            top = np.argsort(symptom_counts[candidate_symptoms])[-40:]
+        candidate_symptoms = candidate_symptoms[top]
+
     for i in candidate_symptoms:
         if i in asked_symptoms:
             continue

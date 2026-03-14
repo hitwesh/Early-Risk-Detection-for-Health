@@ -7,6 +7,14 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 11:30am (Added by Hitesh)
+
+### Changed
+- Limited entropy scoring to the most frequent symptoms (top-40, or top-20 on small datasets) to cut per-question compute time.
+
+### Changed
+- Added timing instrumentation to the diagnosis loop to measure entropy, filtering, per-iteration, model inference, and total runtime.
+
 ## 2026-03-14 11:14am (Added by Hitesh)
 
 ### Added

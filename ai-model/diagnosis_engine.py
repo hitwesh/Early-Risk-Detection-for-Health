@@ -1,4 +1,5 @@
 import json
+import time
 from collections import Counter
 
 import numpy as np
@@ -136,10 +137,16 @@ def run_diagnosis(X, y, symptom_names):
 	asked = set()
 	user_symptoms = []
 
-	for _ in range(6):
+	start_total = time.time()
+
+	for step in range(6):
 		if len(X) < 200:
 			break
+
+		iter_start = time.time()
+		entropy_start = time.time()
 		question, idx = next_best_question(X, y, symptom_names, asked)
+		entropy_end = time.time()
 
 		print("\nDo you have:", question)
 
@@ -149,10 +156,18 @@ def run_diagnosis(X, y, symptom_names):
 		if answer == 1:
 			user_symptoms.append(question)
 
+		filter_start = time.time()
 		X, y = update_dataset(X, y, idx, answer)
+		filter_end = time.time()
 		asked.add(idx)
 
 		print("Remaining cases:", len(X))
+
+		iter_end = time.time()
+		entropy_time = entropy_end - entropy_start
+		filter_time = filter_end - filter_start
+		print(f"[Step {step+1}] Entropy: {entropy_time:.2f}s | Filter: {filter_time:.2f}s")
+		print(f"Iteration {step+1} took {iter_end - iter_start:.2f} seconds")
 
 	base_vector = build_symptom_vector(user_symptoms, symptom_names, symptom_index)
 	base_vector = np.expand_dims(base_vector, axis=0)
@@ -162,8 +177,11 @@ def run_diagnosis(X, y, symptom_names):
 
 	symptom_vector = torch.tensor(augmented_vector, dtype=torch.float32)
 
+	model_start = time.time()
 	results = predict_diseases(model, symptom_vector, disease_labels, symptom_names, base_vector)
 	results = bayesian_update(results, y)
+	model_end = time.time()
+	print(f"Model inference: {model_end - model_start:.4f}s")
 
 	print("\nTop Possible Diseases:\n")
 
@@ -172,5 +190,8 @@ def run_diagnosis(X, y, symptom_names):
 		print("Key contributing symptoms:")
 		for s in r["explanation"]:
 			print("-", s)
+
+	end_total = time.time()
+	print(f"\nTotal diagnosis time: {end_total - start_total:.2f} seconds")
 
 	return results
