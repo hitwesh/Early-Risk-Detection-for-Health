@@ -6,6 +6,11 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 2:43am (Added by Debadrita)
+
+### Changed
+- Refined auth UI with glassmorphism cards, gradient backgrounds, animated buttons, and improved navbar auth display.
+
 ## 2026-03-15 2:16am (Added by Debadrita)
 
 ### Added
