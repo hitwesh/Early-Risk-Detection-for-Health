@@ -10,6 +10,7 @@ from question_engine import next_best_question, update_dataset
 from model import DiseasePredictor
 from disease_prior import apply_disease_prior
 from risk_factors import apply_risk_factor_weights
+from medical_filters import apply_medical_filters
 
 
 def load_model(input_size):
@@ -83,6 +84,7 @@ def predict_diseases(model, symptom_vector, disease_labels, symptom_names, base_
 	raw_probs = probs.cpu().numpy()[0]
 	risk_probs = apply_risk_factor_weights(raw_probs, disease_labels, patient)
 	probs = apply_disease_prior(risk_probs, disease_labels)
+	probs = apply_medical_filters(probs, disease_labels, patient)
 
 	if patient.get("debug_risk"):
 		print("\nDEBUG: Probability change from risk factors\n")

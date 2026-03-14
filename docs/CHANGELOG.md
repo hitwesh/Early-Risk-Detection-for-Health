@@ -7,6 +7,15 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 12:50pm (Added by Hitesh)
+
+### Added
+- Added medical filters for age- and sex-specific conditions to refine final probabilities.
+- Added input validation helpers and migrated patient profile prompts to validated inputs.
+
+### Changed
+- Applied medical filters after disease priors in the diagnosis pipeline.
+
 ## 2026-03-14 12:36pm (Added by Hitesh)
 
 ### Added
