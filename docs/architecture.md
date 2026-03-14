@@ -25,7 +25,7 @@ Early Health Risk Detection AI is a modular, microservice-friendly platform for 
      |                |
      v                v
 +------------------------------+
-|       PostgreSQL DB          |
+|         SQLite DB            |
 +------------------------------+
 ```
 
@@ -34,10 +34,12 @@ Early Health Risk Detection AI is a modular, microservice-friendly platform for 
 ### Frontend Layer
 
 Technologies:
+
 - React
 - TailwindCSS
 
 Responsibilities:
+
 - symptom input
 - dynamic AI questions
 - prediction display
@@ -46,9 +48,11 @@ Responsibilities:
 ### Backend Layer
 
 Technology:
+
 - FastAPI
 
 Responsibilities:
+
 - API routing
 - request validation
 - authentication and authorization
@@ -56,6 +60,7 @@ Responsibilities:
 - database communication
 
 Key endpoints:
+
 - POST /predict
 - POST /symptom-question
 - POST /auth/login
@@ -65,9 +70,11 @@ Key endpoints:
 ### AI Prediction Engine
 
 Technology:
+
 - PyTorch
 
 Responsibilities:
+
 - symptom vector encoding
 - disease prediction
 - probability calculation
@@ -94,22 +101,27 @@ Disease Probability Output
 ### Symptom Graph Engine
 
 Purpose:
+
 - capture relationships between symptoms
 
 Example:
+
 - fever <-> cough <-> fatigue
 
 Outputs:
+
 - symptom embeddings
 - disease similarity clusters
 
 Implementation notes:
+
 - co-occurrence matrix
 - dimensionality reduction
 
 ### Dynamic Question Engine
 
 Purpose:
+
 - select the next most informative question
 
 Logic:
@@ -130,23 +142,28 @@ Next best question
 ### Authentication and Authorization
 
 Security:
+
 - JWT tokens
 - RBAC
 
 Roles:
+
 - User
 - Admin
 
 Capabilities:
+
 - User: submit symptoms, view predictions, view history
 - Admin: monitor system, view analytics, manage datasets
 
 ### Database Layer
 
 Technology:
-- PostgreSQL
+
+- SQLite
 
 Stores:
+
 - users
 - predictions
 - symptom history

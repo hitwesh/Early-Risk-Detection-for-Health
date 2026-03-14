@@ -1,12 +1,14 @@
 # EarlyRisk AI
+
 Industrial-level MedTech Hackathon Project
 
 AI-powered Early Health Risk Detection System
 
 Stack:
+
 - React
 - FastAPI
-- PostgreSQL
+- SQLite
 - PyTorch
 - Docker
 - Redis (optional)
@@ -14,6 +16,7 @@ Stack:
 
 Goal:
 Detect potential diseases early by analyzing:
+
 - symptoms
 - vitals
 - lifestyle
@@ -23,6 +26,7 @@ Target Users:
 General public.
 
 System should:
+
 - ask adaptive health questions
 - accept medical report uploads
 - extract medical data

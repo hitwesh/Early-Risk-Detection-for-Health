@@ -1,12 +1,24 @@
+import time
+
 from fastapi import APIRouter, HTTPException
 
-from app.ai.diagnosis_engine import predict_from_vector, run_diagnosis
+from app.ai.diagnosis_engine import normalize_symptom, predict_from_vector, run_diagnosis
 from app.ai.model_loader import get_model
-from app.schemas.diagnosis_schema import DiagnosisAnswerRequest, DiagnosisRequest, DiagnosisResponse
+from app.schemas.diagnosis_schema import (
+	DiagnosisAnswerRequest,
+	DiagnosisAnswerResponse,
+	DiagnosisRequest,
+	DiagnosisResponse,
+	DiagnosisStartRequest,
+)
 from app.services.diagnosis_session import (
+	CONFIDENCE_STOP,
+	MAX_QUESTIONS,
+	MIN_CASES,
 	create_session,
 	get_next_symptom,
 	get_session,
+	is_session_finished,
 	update_symptom,
 )
 
@@ -17,8 +29,9 @@ router = APIRouter(prefix="/diagnosis", tags=["Diagnosis"])
 def predict_disease(data: DiagnosisRequest):
 	if len(data.symptoms) == 0:
 		raise HTTPException(status_code=400, detail="At least one symptom must be provided")
+	normalized_symptoms = [normalize_symptom(symptom) for symptom in data.symptoms]
 	result = run_diagnosis(
-		symptoms=data.symptoms,
+		symptoms=normalized_symptoms,
 		risk_factors=data.dict(),
 	)
 
@@ -26,13 +39,34 @@ def predict_disease(data: DiagnosisRequest):
 
 
 @router.post("/start")
-def start_diagnosis():
+def start_diagnosis(payload: DiagnosisStartRequest | None = None):
 	artifacts = get_model()
-	idx, symptom = get_next_symptom(artifacts.symptom_names, set())
+	risk_factors = {}
+	use_bayes_engine = False
+	max_questions = None
+	min_cases = None
+	confidence_stop = None
+	if payload is not None:
+		payload_data = payload.dict(exclude_none=True)
+		use_bayes_engine = payload_data.pop("use_bayes_engine", False)
+		max_questions = payload_data.pop("max_questions", None)
+		min_cases = payload_data.pop("min_cases", None)
+		confidence_stop = payload_data.pop("confidence_stop", None)
+		risk_factors = payload_data
+
+	session_id = create_session(
+		artifacts.symptom_names,
+		artifacts.disease_labels,
+		use_bayes_engine=use_bayes_engine,
+		max_questions=max_questions if max_questions is not None else MAX_QUESTIONS,
+		min_cases=min_cases if min_cases is not None else MIN_CASES,
+		confidence_stop=confidence_stop if confidence_stop is not None else CONFIDENCE_STOP,
+		risk_factors=risk_factors,
+	)
+	session = get_session(session_id)
+	idx, symptom, _engine = get_next_symptom(session, artifacts.symptom_names)
 	if symptom is None:
 		raise HTTPException(status_code=400, detail="No symptoms available")
-
-	session_id = create_session(artifacts.symptom_names)
 	question = f"Do you have {symptom.replace('_', ' ')}?"
 
 	return {
@@ -42,7 +76,7 @@ def start_diagnosis():
 	}
 
 
-@router.post("/answer")
+@router.post("/answer", response_model=DiagnosisAnswerResponse)
 def answer_question(req: DiagnosisAnswerRequest):
 	artifacts = get_model()
 	session = get_session(req.session_id)
@@ -50,23 +84,51 @@ def answer_question(req: DiagnosisAnswerRequest):
 		raise HTTPException(status_code=404, detail="Session not found")
 
 	try:
-		symptom_index = artifacts.symptom_names.index(req.symptom)
+		normalized_symptom = normalize_symptom(req.symptom)
+		symptom_index = artifacts.symptom_names.index(normalized_symptom)
 	except ValueError as exc:
 		raise HTTPException(status_code=400, detail="Unknown symptom") from exc
 
 	if symptom_index in session["asked"]:
 		raise HTTPException(status_code=400, detail="Symptom already answered")
 
-	update_symptom(req.session_id, symptom_index, req.answer)
+	update_symptom(req.session_id, symptom_index, normalized_symptom, req.answer)
+	prediction = predict_from_vector(session["vector"], session["risk_factors"])
+	max_probability = max(prediction["probabilities"]) if prediction["probabilities"] else 0.0
+	if is_session_finished(session, len(artifacts.symptom_names), max_probability=max_probability):
+		return {
+			"finished": True,
+			"step": session["questions_asked"],
+			"remaining_cases": len(session["X"]),
+			"engine": session.get("last_engine"),
+			"predictions": prediction,
+			"positive_symptoms": session["positive_symptoms"],
+			"elapsed_seconds": time.time() - session["started_at"],
+		}
 
-	idx, symptom = get_next_symptom(artifacts.symptom_names, session["asked"])
+	idx, symptom, engine = get_next_symptom(session, artifacts.symptom_names)
 	if symptom is None:
-		raise HTTPException(status_code=400, detail="No more questions available")
+		return {
+			"finished": True,
+			"step": session["questions_asked"],
+			"remaining_cases": len(session["X"]),
+			"engine": session.get("last_engine"),
+			"predictions": prediction,
+			"positive_symptoms": session["positive_symptoms"],
+			"elapsed_seconds": time.time() - session["started_at"],
+		}
 
 	question = f"Do you have {symptom.replace('_', ' ')}?"
 	return {
+		"finished": False,
 		"question": question,
 		"symptom": symptom,
+		"step": session["questions_asked"],
+		"remaining_cases": len(session["X"]),
+		"engine": engine,
+		"predictions": prediction,
+		"positive_symptoms": session["positive_symptoms"],
+		"elapsed_seconds": time.time() - session["started_at"],
 	}
 
 
@@ -76,4 +138,6 @@ def get_result(session_id: str):
 	if session is None:
 		raise HTTPException(status_code=404, detail="Session not found")
 
-	return predict_from_vector(session["vector"], {})
+	result = predict_from_vector(session["vector"], session["risk_factors"])
+	result["elapsed_seconds"] = time.time() - session["started_at"]
+	return result

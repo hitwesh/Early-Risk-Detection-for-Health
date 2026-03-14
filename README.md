@@ -75,6 +75,7 @@ The system can explain predictions by surfacing contributing symptoms.
 Prediction: Pneumonia
 
 Key contributing symptoms:
+
 - fever
 - cough
 - shortness of breath
@@ -148,7 +149,7 @@ AI / ML:
 
 Database:
 
-- PostgreSQL
+- SQLite
 
 Authentication:
 
@@ -167,7 +168,7 @@ Backend API (FastAPI)
 AI Prediction Engine (PyTorch)
     |
     v
-PostgreSQL Database
+SQLite Database
 ```
 
 ## Project Structure
