@@ -1,0 +1,23 @@
+# python
+__pycache__/
+*.pyc
+venv/
+
+# env
+.env
+
+# node
+node_modules/
+
+# ai models
+*.pt
+*.pth
+
+# logs
+*.log
+
+# datasets
+datasets/raw/
+
+# docker
+*.tar
