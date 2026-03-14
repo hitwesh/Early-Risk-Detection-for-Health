@@ -15,8 +15,8 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <section className="space-y-6">
-      <div className="rounded-xl bg-white p-6 shadow-md">
+    <section className="fade-in space-y-8">
+      <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
         <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
           Patient Overview
         </p>
@@ -28,14 +28,14 @@ const Dashboard = () => {
         </p>
       </div>
 
-      <section className="space-y-3 rounded-xl bg-white p-6 shadow-md">
+      <section className="space-y-4 rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
         <h2 className="text-lg font-semibold">Diagnosis History</h2>
         {history.length > 0 ? (
           <div className="space-y-3">
             {history.map((entry, index) => (
               <div
                 key={`${entry.timestamp}-${index}`}
-                className="rounded-lg border border-rose-100 bg-rose-50/40 p-4 text-sm"
+                className="rounded-xl border border-white/30 bg-white/60 p-4 text-sm shadow-md backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl"
               >
                 <p className="text-xs uppercase tracking-widest text-rose-500">
                   {new Date(entry.timestamp).toLocaleString()}

@@ -31,9 +31,9 @@ const Landing = () => {
   ];
 
   return (
-    <section className="space-y-12">
+    <section className="fade-in space-y-12">
       {/* HERO SECTION */}
-      <div className="rounded-xl bg-white p-10 shadow-md">
+      <div className="rounded-xl border border-white/30 bg-white/60 p-10 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
         <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
           AI Medical Assistant
         </p>
@@ -52,14 +52,14 @@ const Landing = () => {
 
         <Link
           to="/diagnosis"
-          className="mt-6 inline-flex rounded-lg bg-rose-600 px-6 py-2 text-sm font-medium text-white transition hover:bg-rose-700"
+          className="mt-6 inline-flex rounded-lg bg-rose-600 px-6 py-2 text-sm font-medium text-white transition duration-200 ease-in-out hover:scale-105 hover:bg-rose-700 hover:shadow-lg active:scale-95"
         >
           Start AI Diagnosis
         </Link>
       </div>
 
       {/* ABOUT SECTION */}
-      <div className="rounded-xl bg-white p-6 shadow-md">
+      <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
         <h2 className="text-lg font-semibold text-slate-900">
           About SymptoScan
         </h2>
@@ -79,7 +79,10 @@ const Landing = () => {
 
         <div className="grid gap-4 md:grid-cols-3">
           {steps.map((step, index) => (
-            <div key={step} className="rounded-xl bg-white p-5 shadow-md">
+            <div
+              key={step}
+              className="rounded-xl border border-white/30 bg-white/60 p-5 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl"
+            >
               <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
                 Step {index + 1}
               </p>
@@ -98,7 +101,7 @@ const Landing = () => {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="rounded-xl bg-white p-5 shadow-md"
+              className="rounded-xl border border-white/30 bg-white/60 p-5 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl"
             >
               <p className="text-sm font-semibold text-slate-900">
                 {feature.title}

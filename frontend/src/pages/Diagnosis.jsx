@@ -165,7 +165,7 @@ const Diagnosis = () => {
   };
 
   return (
-    <section className="space-y-6">
+    <section className="fade-in space-y-8">
       <div>
         <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
           Patient Intake
@@ -175,7 +175,7 @@ const Diagnosis = () => {
         </h1>
       </div>
       <form
-        className="space-y-4 rounded-xl bg-white p-6 shadow-md"
+        className="space-y-4 rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl"
         onSubmit={handleSubmit}
       >
         <div className="grid gap-4 md:grid-cols-2">
@@ -187,7 +187,7 @@ const Diagnosis = () => {
               id="age"
               type="number"
               min="0"
-              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-300 focus:outline-none"
+              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
               value={formValues.age}
               onChange={handleChange("age")}
             />
@@ -198,7 +198,7 @@ const Diagnosis = () => {
             </label>
             <select
               id="sex"
-              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-300 focus:outline-none"
+              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
               value={formValues.sex}
               onChange={handleChange("sex")}
             >
@@ -215,7 +215,7 @@ const Diagnosis = () => {
               type="number"
               min="0"
               step="0.1"
-              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-300 focus:outline-none"
+              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
               value={formValues.bmi}
               onChange={handleChange("bmi")}
             />
@@ -231,7 +231,7 @@ const Diagnosis = () => {
               id="bloodPressure"
               type="number"
               min="0"
-              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-300 focus:outline-none"
+              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
               value={formValues.bloodPressure}
               onChange={handleChange("bloodPressure")}
             />
@@ -247,7 +247,7 @@ const Diagnosis = () => {
               id="bloodSugar"
               type="number"
               min="0"
-              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-300 focus:outline-none"
+              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
               value={formValues.bloodSugar}
               onChange={handleChange("bloodSugar")}
             />
@@ -269,7 +269,7 @@ const Diagnosis = () => {
                 {field.label}
               </label>
               <select
-                className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-300 focus:outline-none"
+                className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
                 value={formValues[field.key]}
                 onChange={handleChange(field.key)}
               >
@@ -287,7 +287,7 @@ const Diagnosis = () => {
         )}
 
         <button
-          className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700"
+          className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white transition duration-200 ease-in-out hover:scale-105 hover:bg-rose-700 hover:shadow-lg active:scale-95"
           type="submit"
           disabled={isSubmitting}
         >
@@ -295,7 +295,7 @@ const Diagnosis = () => {
         </button>
       </form>
 
-      <div className="rounded-xl bg-white p-6 shadow-md">
+      <div className="rounded-xl border border-rose-200 bg-white/70 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
         <h2 className="text-lg font-semibold text-slate-900">
           AI Analysis Progress
         </h2>
@@ -313,7 +313,7 @@ const Diagnosis = () => {
       </div>
 
       {followUpQuestion && (
-        <div className="rounded-xl bg-white p-6 shadow-md">
+        <div className="fade-in rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
           <h2 className="text-lg font-semibold text-slate-900">
             Follow-up Question
           </h2>
@@ -326,7 +326,7 @@ const Diagnosis = () => {
                 <button
                   key={label}
                   type="button"
-                  className={`rounded-lg px-4 py-2 text-sm font-medium ${
+                  className={`rounded-lg px-4 py-2 text-sm font-medium transition duration-200 ease-in-out hover:scale-105 hover:shadow-lg active:scale-95 ${
                     isActive
                       ? "bg-rose-600 text-white"
                       : "border border-rose-200 bg-white text-rose-900"
