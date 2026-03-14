@@ -30,20 +30,27 @@ def information_gain(X, y, symptom_index):
     return gain
 
 
-def rank_symptoms(X, y, asked_symptoms=None):
+def rank_symptoms(X, y, asked_symptoms=None, symptom_counts=None):
     if asked_symptoms is None:
         asked_symptoms = set()
 
     scores = {}
 
-    symptom_counts = X.sum(axis=0)
-    candidate_symptoms = np.where(symptom_counts > 0)[0]
+    if symptom_counts is None:
+        symptom_counts = X.sum(axis=0)
+
+    candidate_symptoms = np.where(symptom_counts > 5)[0]
 
     if candidate_symptoms.size > 0:
-        if len(X) < 5000:
-            top = np.argsort(symptom_counts[candidate_symptoms])[-20:]
+        if len(X) > 50000:
+            top_k = 25
+        elif len(X) > 10000:
+            top_k = 40
         else:
-            top = np.argsort(symptom_counts[candidate_symptoms])[-40:]
+            top_k = 80
+
+        top_k = min(top_k, candidate_symptoms.size)
+        top = np.argsort(symptom_counts[candidate_symptoms])[-top_k:]
         candidate_symptoms = candidate_symptoms[top]
 
     for i in candidate_symptoms:
@@ -58,8 +65,8 @@ def rank_symptoms(X, y, asked_symptoms=None):
     return ranked
 
 
-def next_best_question(X, y, symptom_names, asked_symptoms):
-    ranked = rank_symptoms(X, y, asked_symptoms)
+def next_best_question(X, y, symptom_names, asked_symptoms, symptom_counts=None):
+    ranked = rank_symptoms(X, y, asked_symptoms, symptom_counts)
 
     best_index = ranked[0][0]
 

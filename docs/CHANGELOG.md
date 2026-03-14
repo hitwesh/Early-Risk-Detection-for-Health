@@ -7,7 +7,12 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
-## 2026-03-14 1:04pm (Added by Hitesh)
+## 2026-03-14 01:19pm (Added by Hitesh)
+
+### Changed
+- Cached symptom counts per iteration and limited entropy scoring to frequent symptoms using dynamic top-k thresholds.
+
+## 2026-03-14 01:04pm (Added by Hitesh)
 
 ### Changed
 - Skipped the pregnancy prompt when age is under 18 or sex is male, defaulting pregnancy to false.

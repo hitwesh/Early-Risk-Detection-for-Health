@@ -171,7 +171,8 @@ def run_diagnosis(X, y, symptom_names, patient=None):
 
 		iter_start = time.time()
 		entropy_start = time.time()
-		question, idx = next_best_question(X, y, symptom_names, asked)
+		symptom_counts = X.sum(axis=0)
+		question, idx = next_best_question(X, y, symptom_names, asked, symptom_counts)
 		entropy_end = time.time()
 
 		print("\nDo you have:", question)
