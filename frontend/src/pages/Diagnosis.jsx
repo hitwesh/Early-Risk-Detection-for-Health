@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { buildApiUrl } from "../services/api.js";
+import CustomDropdown from "../components/CustomDropdown.jsx";
 
 const Diagnosis = () => {
   const [formValues, setFormValues] = useState({
@@ -173,111 +174,133 @@ const Diagnosis = () => {
         <h1 className="mt-2 text-2xl font-semibold text-slate-900">
           Diagnosis
         </h1>
+        <p className="mt-2 text-sm text-slate-500">
+          Provide patient health parameters to begin AI diagnosis.
+        </p>
       </div>
+
       <form
-        className="space-y-4 rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl"
+        className="mx-auto max-w-4xl space-y-4 rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl"
         onSubmit={handleSubmit}
       >
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-700" htmlFor="age">
-              Age
-            </label>
-            <input
-              id="age"
-              type="number"
-              min="0"
-              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
-              value={formValues.age}
-              onChange={handleChange("age")}
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-700" htmlFor="sex">
-              Sex
-            </label>
-            <select
-              id="sex"
-              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
-              value={formValues.sex}
-              onChange={handleChange("sex")}
-            >
-              <option value="male">male</option>
-              <option value="female">female</option>
-            </select>
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-700" htmlFor="bmi">
-              BMI
-            </label>
-            <input
-              id="bmi"
-              type="number"
-              min="0"
-              step="0.1"
-              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
-              value={formValues.bmi}
-              onChange={handleChange("bmi")}
-            />
-          </div>
-          <div className="space-y-2">
-            <label
-              className="text-sm font-medium text-slate-700"
-              htmlFor="bloodPressure"
-            >
-              Blood Pressure
-            </label>
-            <input
-              id="bloodPressure"
-              type="number"
-              min="0"
-              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
-              value={formValues.bloodPressure}
-              onChange={handleChange("bloodPressure")}
-            />
-          </div>
-          <div className="space-y-2">
-            <label
-              className="text-sm font-medium text-slate-700"
-              htmlFor="bloodSugar"
-            >
-              Blood Sugar
-            </label>
-            <input
-              id="bloodSugar"
-              type="number"
-              min="0"
-              className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
-              value={formValues.bloodSugar}
-              onChange={handleChange("bloodSugar")}
-            />
-          </div>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          {[
-            { key: "diabetesHistory", label: "Diabetes history" },
-            { key: "hypertensionHistory", label: "Hypertension history" },
-            { key: "smoking", label: "Smoking" },
-            { key: "alcohol", label: "Alcohol use" },
-            { key: "familyHeartDisease", label: "Family heart disease" },
-            { key: "recentInfection", label: "Recent infection" },
-            { key: "chronicDisease", label: "Chronic disease history" },
-          ].map((field) => (
-            <div className="space-y-2" key={field.key}>
-              <label className="text-sm font-medium text-slate-700">
-                {field.label}
-              </label>
-              <select
-                className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
-                value={formValues[field.key]}
-                onChange={handleChange(field.key)}
+        <div className="border-t border-rose-100 pt-6">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="rounded-lg p-2 transition duration-150 hover:bg-rose-50/30">
+              <label
+                className="mb-1 block text-sm font-medium text-slate-700"
+                htmlFor="age"
               >
-                <option value="no">no</option>
-                <option value="yes">yes</option>
-              </select>
+                Age
+              </label>
+              <input
+                id="age"
+                type="number"
+                min="0"
+                className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm transition duration-200 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
+                value={formValues.age}
+                onChange={handleChange("age")}
+              />
             </div>
-          ))}
+
+            <div className="rounded-lg p-2 transition duration-150 hover:bg-rose-50/30">
+              <label
+                className="mb-1 block text-sm font-medium text-slate-700"
+                htmlFor="sex"
+              >
+                Sex
+              </label>
+              <CustomDropdown
+                id="sex"
+                value={formValues.sex}
+                onChange={(val) =>
+                  setFormValues((prev) => ({ ...prev, sex: val }))
+                }
+                options={"male,female".split(",")}
+                placeholder="Select"
+              />
+            </div>
+
+            <div className="rounded-lg p-2 transition duration-150 hover:bg-rose-50/30">
+              <label
+                className="mb-1 block text-sm font-medium text-slate-700"
+                htmlFor="bmi"
+              >
+                BMI
+              </label>
+              <input
+                id="bmi"
+                type="number"
+                min="0"
+                step="0.1"
+                className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm transition duration-200 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
+                value={formValues.bmi}
+                onChange={handleChange("bmi")}
+              />
+            </div>
+
+            <div className="rounded-lg p-2 transition duration-150 hover:bg-rose-50/30">
+              <label
+                className="mb-1 block text-sm font-medium text-slate-700"
+                htmlFor="bloodPressure"
+              >
+                Blood Pressure
+              </label>
+              <input
+                id="bloodPressure"
+                type="number"
+                min="0"
+                className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm transition duration-200 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
+                value={formValues.bloodPressure}
+                onChange={handleChange("bloodPressure")}
+              />
+            </div>
+
+            <div className="rounded-lg p-2 transition duration-150 hover:bg-rose-50/30">
+              <label
+                className="mb-1 block text-sm font-medium text-slate-700"
+                htmlFor="bloodSugar"
+              >
+                Blood Sugar
+              </label>
+              <input
+                id="bloodSugar"
+                type="number"
+                min="0"
+                className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm transition duration-200 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
+                value={formValues.bloodSugar}
+                onChange={handleChange("bloodSugar")}
+              />
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+            {[
+              { key: "diabetesHistory", label: "Diabetes history" },
+              { key: "hypertensionHistory", label: "Hypertension history" },
+              { key: "smoking", label: "Smoking" },
+              { key: "alcohol", label: "Alcohol use" },
+              { key: "familyHeartDisease", label: "Family heart disease" },
+              { key: "recentInfection", label: "Recent infection" },
+              { key: "chronicDisease", label: "Chronic disease history" },
+            ].map((field) => (
+              <div
+                className="rounded-lg p-2 transition duration-150 hover:bg-rose-50/30"
+                key={field.key}
+              >
+                <label className="mb-1 block text-sm font-medium text-slate-700">
+                  {field.label}
+                </label>
+                <CustomDropdown
+                  value={formValues[field.key]}
+                  onChange={(val) =>
+                    setFormValues((prev) => ({ ...prev, [field.key]: val }))
+                  }
+                  options={"no,yes".split(",")}
+                  placeholder="Select"
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         {error && <p className="text-sm text-rose-600">{error}</p>}
@@ -286,13 +309,18 @@ const Diagnosis = () => {
           <p className="text-sm text-rose-600">Analyzing symptoms...</p>
         )}
 
-        <button
-          className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white transition duration-200 ease-in-out hover:scale-105 hover:bg-rose-700 hover:shadow-lg active:scale-95"
-          type="submit"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Analyzing symptoms..." : "Start AI Diagnosis"}
-        </button>
+        <div className="flex justify-center pt-2">
+          <button
+            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-rose-500 to-rose-600 px-5 py-2 text-sm font-medium text-white transition duration-200 ease-in-out hover:scale-105 hover:from-rose-600 hover:to-rose-700 hover:shadow-lg active:scale-95"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            <span>
+              {isSubmitting ? "Analyzing symptoms..." : "Start AI Diagnosis"}
+            </span>
+            {!isSubmitting && <span aria-hidden="true">&rarr;</span>}
+          </button>
+        </div>
       </form>
 
       <div className="rounded-xl border border-rose-200 bg-white/70 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
@@ -319,7 +347,7 @@ const Diagnosis = () => {
           </h2>
           <p className="mt-2 text-sm text-slate-600">{followUpQuestion}</p>
           <div className="mt-4 flex gap-3">
-            {["Yes", "No"].map((label) => {
+            {"Yes,No".split(",").map((label) => {
               const value = label.toLowerCase();
               const isActive = followUpAnswer === value;
               return (
