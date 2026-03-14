@@ -7,6 +7,16 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 12:08pm (Added by Hitesh)
+
+### Added
+- Added patient profile helper for collecting extended context fields (age, sex, BMI, blood pressure, blood sugar, and history flags).
+- Added risk factor debug output to show before vs after probability adjustments.
+
+### Changed
+- Expanded risk factor weighting rules to include age, sex, blood sugar, alcohol use, and family heart disease.
+- Updated the diagnosis test runner to use patient_profile input and a debug toggle.
+
 ## 2026-03-14 12:00pm (Added by Hitesh)
 
 ### Changed

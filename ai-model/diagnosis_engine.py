@@ -79,8 +79,15 @@ def predict_diseases(model, symptom_vector, disease_labels, symptom_names, base_
 		outputs = model(symptom_vector)
 		probs = torch.softmax(outputs, dim=1)
 
-	probs = probs.cpu().numpy()[0]
-	probs = apply_risk_factor_weights(probs, disease_labels, patient)
+	raw_probs = probs.cpu().numpy()[0]
+	probs = apply_risk_factor_weights(raw_probs, disease_labels, patient)
+
+	if patient.get("debug_risk"):
+		print("\nDEBUG: Probability change from risk factors\n")
+		for i in np.argsort(raw_probs)[-5:][::-1]:
+			print(
+				f"{disease_labels[i]} | before: {raw_probs[i]*100:.2f}% -> after: {probs[i]*100:.2f}%"
+			)
 
 	top_indices = np.argsort(probs)[-5:][::-1]
 
