@@ -6,6 +6,16 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 3:22am (Added by Debadrita)
+
+### Changed
+- Applied glassmorphism styling, hover animations, and consistent spacing to landing, diagnosis, and dashboard pages to match auth UI styling.
+
+## 2026-03-15 3:15am (Added by Debadrita)
+
+### Changed
+- Removed frontend route gating so all pages are publicly accessible while keeping auth pages for demo use.
+
 ## 2026-03-15 2:43am (Added by Debadrita)
 
 ### Changed
