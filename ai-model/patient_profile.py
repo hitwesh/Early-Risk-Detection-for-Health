@@ -14,7 +14,11 @@ def get_patient_profile():
 	alcohol = ask_yes_no("Alcohol use (y/n): ")
 	family_heart_disease = ask_yes_no("Family heart disease (y/n): ")
 	recent_infection = ask_yes_no("Recent infection (y/n): ")
-	pregnancy = ask_yes_no("Pregnancy (y/n): ")
+
+	if age < 18 or sex == "male":
+		pregnancy = False
+	else:
+		pregnancy = ask_yes_no("Pregnancy (y/n): ")
 	chronic_disease = ask_yes_no("Chronic disease history (y/n): ")
 
 	return {

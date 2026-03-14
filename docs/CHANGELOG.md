@@ -7,6 +7,11 @@
 - Always add changes on the top of previous changes, do not break this.
 
 
+## 2026-03-14 1:04pm (Added by Hitesh)
+
+### Changed
+- Skipped the pregnancy prompt when age is under 18 or sex is male, defaulting pregnancy to false.
+
 ## 2026-03-14 12:50pm (Added by Hitesh)
 
 ### Added
@@ -15,6 +20,9 @@
 
 ### Changed
 - Applied medical filters after disease priors in the diagnosis pipeline.
+
+### Changed
+- Replaced the fixed 6-question limit with dynamic stopping based on max questions, minimum remaining cases, and confidence threshold.
 
 ## 2026-03-14 12:36pm (Added by Hitesh)
 

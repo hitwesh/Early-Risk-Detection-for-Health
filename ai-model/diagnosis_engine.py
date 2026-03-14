@@ -156,10 +156,17 @@ def run_diagnosis(X, y, symptom_names, patient=None):
 	asked = set()
 	user_symptoms = []
 
+	max_questions = 12
+	min_cases = 100
+	confidence_stop = 0.90
+
 	start_total = time.time()
 
-	for step in range(6):
-		if len(X) < 200:
+	step = 0
+	while step < max_questions:
+		step += 1
+		if len(X) < min_cases:
+			print("Dataset sufficiently narrowed.")
 			break
 
 		iter_start = time.time()
@@ -185,8 +192,27 @@ def run_diagnosis(X, y, symptom_names, patient=None):
 		iter_end = time.time()
 		entropy_time = entropy_end - entropy_start
 		filter_time = filter_end - filter_start
-		print(f"[Step {step+1}] Entropy: {entropy_time:.2f}s | Filter: {filter_time:.2f}s")
-		print(f"Iteration {step+1} took {iter_end - iter_start:.2f} seconds")
+		print(f"[Step {step}] Entropy: {entropy_time:.2f}s | Filter: {filter_time:.2f}s")
+		print(f"Iteration {step} took {iter_end - iter_start:.2f} seconds")
+
+		base_vector = build_symptom_vector(user_symptoms, symptom_names, symptom_index)
+		base_vector = np.expand_dims(base_vector, axis=0)
+
+		augmented_vector = add_embedding_features(base_vector, embeddings)
+		augmented_vector = scaler.transform(augmented_vector)
+		provisional_vector = torch.tensor(augmented_vector, dtype=torch.float32)
+
+		with torch.no_grad():
+			provisional_outputs = model(provisional_vector)
+			provisional_probs = torch.softmax(provisional_outputs, dim=1).cpu().numpy()[0]
+
+		provisional_probs = apply_risk_factor_weights(provisional_probs, disease_labels, patient or {})
+		provisional_probs = apply_disease_prior(provisional_probs, disease_labels)
+		provisional_probs = apply_medical_filters(provisional_probs, disease_labels, patient or {})
+
+		if provisional_probs.max() >= confidence_stop:
+			print("High confidence diagnosis reached.")
+			break
 
 	base_vector = build_symptom_vector(user_symptoms, symptom_names, symptom_index)
 	base_vector = np.expand_dims(base_vector, axis=0)
