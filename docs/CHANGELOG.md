@@ -6,6 +6,18 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 01:39pm (Added by Tamoghno)
+
+### Added
+
+- Added global API exception handling with standardized error payloads.
+- Added request ID and security header middleware for production diagnostics.
+- Added health and readiness endpoints for operational checks.
+
+### Changed
+
+- Added CORS and trusted host middleware to improve deployment readiness.
+
 ## 2026-03-15 12:20pm (Added by Tamoghno)
 
 ### Changed
