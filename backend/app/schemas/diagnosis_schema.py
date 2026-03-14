@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 
 
 class DiagnosisRequest(BaseModel):
-	symptoms: list[str] = Field(..., min_items=1)
+	symptoms: list[str] = Field(..., min_length=1)
 	age: int = Field(..., ge=0, le=120)
 	sex: str
 	bmi: float = Field(..., ge=10, le=60)

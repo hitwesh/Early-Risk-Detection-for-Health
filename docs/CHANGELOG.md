@@ -6,7 +6,39 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
-## 2026-03-15 01:39pm (Added by Tamoghno)
+## 2026-03-15 02:16am (Added by Tamoghno)
+
+### Changed
+
+- Updated auth tests to use unique emails for repeatable test runs.
+
+### Changed
+
+- Updated auth tests to use unique emails for repeatable test runs.
+
+### Changed
+
+- Fixed a syntax error in settings configuration initialization.
+
+### Changed
+
+- Fixed a syntax error in settings configuration initialization.
+
+### Changed
+
+- Updated Pydantic settings and schemas to non-deprecated config patterns.
+- Replaced FastAPI startup event with lifespan handler to remove deprecation warnings.
+
+### Changed
+
+- Updated Pydantic settings and schemas to non-deprecated config patterns.
+- Replaced FastAPI startup event with lifespan handler to remove deprecation warnings.
+
+### Added
+
+- Added backend test suite scaffolding with pytest client and core API tests.
+
+## 2026-03-15 01:39am (Added by Tamoghno)
 
 ### Added
 
