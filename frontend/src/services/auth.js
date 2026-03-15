@@ -69,6 +69,40 @@ export const getUserHistory = async () => {
   return response.json();
 };
 
+export const getAdminStats = async () => {
+  const response = await fetch(buildApiUrl("/admin/stats"), {
+    headers: {
+      "Content-Type": "application/json",
+      ...buildAuthHeaders(),
+    },
+  });
+
+  if (!response.ok) {
+    const error = new Error("Unable to load admin stats.");
+    error.status = response.status;
+    throw error;
+  }
+
+  return response.json();
+};
+
+export const getAdminUsers = async () => {
+  const response = await fetch(buildApiUrl("/admin/users"), {
+    headers: {
+      "Content-Type": "application/json",
+      ...buildAuthHeaders(),
+    },
+  });
+
+  if (!response.ok) {
+    const error = new Error("Unable to load admin users.");
+    error.status = response.status;
+    throw error;
+  }
+
+  return response.json();
+};
+
 export const logoutUser = () => {
   localStorage.removeItem("authToken");
   localStorage.removeItem("userEmail");

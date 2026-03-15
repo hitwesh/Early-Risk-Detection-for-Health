@@ -74,3 +74,19 @@ class DiagnosisHistoryOut(BaseModel):
 	probabilities: list[float]
 	risk_factors: Optional[list[str]] = None
 	created_at: str
+
+
+class AdminStatsOut(BaseModel):
+	total_users: int
+	total_diagnoses: int
+	users_with_diagnoses: int
+	latest_diagnosis_at: Optional[str] = None
+
+
+class AdminUserHistoryOut(BaseModel):
+	id: int
+	email: str
+	role: str
+	total_diagnoses: int
+	latest_diagnosis_at: Optional[str] = None
+	history: list[DiagnosisHistoryOut]

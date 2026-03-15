@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+### 2023-03-15 01:29pm (Added by Hitesh)
+
+### Changed
+
+- Added admin-only endpoints for stats and user histories and replaced the Admin Panel with live data and drill-down views.
+
 ## 2026-03-15 01:11pm (Added by Hitesh)
 
 ### Changed

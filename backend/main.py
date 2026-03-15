@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
+from app.api.v1.routes.admin import router as admin_router
 from app.api.v1.routes.auth import router as auth_router
 from app.api.v1.routes.diagnosis import router as diagnosis_router
 from app.api.v1.routes.users import router as user_router
@@ -55,6 +56,7 @@ app.middleware("http")(add_request_id)
 app.middleware("http")(add_security_headers)
 
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
+app.include_router(admin_router)
 app.include_router(user_router, prefix="/users", tags=["Users"])
 app.include_router(diagnosis_router)
 
