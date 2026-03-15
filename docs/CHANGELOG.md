@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 11:33pm (Added by Hitesh)
+
+### Changed
+
+- Moved .dockerignore to the repository root and expanded Docker build context exclusions.
+
 ## 2026-03-15 (Added by Tamoghno)
 
 ### Added
