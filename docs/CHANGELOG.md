@@ -6,6 +6,14 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 02:27pm (Added by Hitesh)
+
+### Changed
+
+- Removed PDF report charts, streamlined results to only download the current report, and fixed admin full-history downloads by routing /report/all ahead of /report/{history_id}.
+- Updated diagnosis flow to hide the progress panel and swap the intake form with the follow-up question panel when questions begin.
+- Adjusted landing coverage metrics to 440+ conditions and aligned dropdown/inputs with the new clinical styling.
+
 ## 2026-03-15 02:14pm (Added by Hitesh)
 
 ### Changed

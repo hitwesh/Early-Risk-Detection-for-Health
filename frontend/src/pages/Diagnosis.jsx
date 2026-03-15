@@ -219,166 +219,14 @@ const Diagnosis = () => {
         </p>
       </div>
 
-      <form
-        className="card mx-auto max-w-4xl space-y-4 p-8"
-        onSubmit={handleSubmit}
-      >
-        <div className="border-t border-slate-200 pt-6">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
-              <label
-                className="mb-1 block text-sm font-medium text-slate-700"
-                htmlFor="age"
-              >
-                Age
-              </label>
-              <input
-                id="age"
-                type="number"
-                min="0"
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition duration-200 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
-                value={formValues.age}
-                onChange={handleChange("age")}
-              />
-            </div>
-
-            <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
-              <label
-                className="mb-1 block text-sm font-medium text-slate-700"
-                htmlFor="sex"
-              >
-                Sex
-              </label>
-              <CustomDropdown
-                id="sex"
-                value={formValues.sex}
-                onChange={(val) =>
-                  setFormValues((prev) => ({ ...prev, sex: val }))
-                }
-                options={"male,female".split(",")}
-                placeholder="Select"
-              />
-            </div>
-
-            <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
-              <label
-                className="mb-1 block text-sm font-medium text-slate-700"
-                htmlFor="bmi"
-              >
-                BMI
-              </label>
-              <input
-                id="bmi"
-                type="number"
-                min="0"
-                step="0.1"
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition duration-200 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
-                value={formValues.bmi}
-                onChange={handleChange("bmi")}
-              />
-            </div>
-
-            <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
-              <label
-                className="mb-1 block text-sm font-medium text-slate-700"
-                htmlFor="bloodPressure"
-              >
-                Blood Pressure
-              </label>
-              <input
-                id="bloodPressure"
-                type="number"
-                min="0"
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition duration-200 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
-                value={formValues.bloodPressure}
-                onChange={handleChange("bloodPressure")}
-              />
-            </div>
-
-            <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
-              <label
-                className="mb-1 block text-sm font-medium text-slate-700"
-                htmlFor="bloodSugar"
-              >
-                Blood Sugar
-              </label>
-              <input
-                id="bloodSugar"
-                type="number"
-                min="0"
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition duration-200 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
-                value={formValues.bloodSugar}
-                onChange={handleChange("bloodSugar")}
-              />
-            </div>
-          </div>
-
-          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-            {[
-              { key: "diabetesHistory", label: "Diabetes history" },
-              { key: "hypertensionHistory", label: "Hypertension history" },
-              { key: "smoking", label: "Smoking" },
-              { key: "alcohol", label: "Alcohol use" },
-              { key: "familyHeartDisease", label: "Family heart disease" },
-              { key: "recentInfection", label: "Recent infection" },
-              { key: "chronicDisease", label: "Chronic disease history" },
-            ].map((field) => (
-              <div
-                className="rounded-lg p-2 transition duration-150 hover:bg-slate-50"
-                key={field.key}
-              >
-                <label className="mb-1 block text-sm font-medium text-slate-700">
-                  {field.label}
-                </label>
-                <CustomDropdown
-                  value={formValues[field.key]}
-                  onChange={(val) =>
-                    setFormValues((prev) => ({ ...prev, [field.key]: val }))
-                  }
-                  options={"no,yes".split(",")}
-                  placeholder="Select"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {error && <p className="text-sm text-rose-600">{error}</p>}
-
-        {isSubmitting && (
-          <p className="text-sm text-slate-500">Analyzing symptoms...</p>
-        )}
-
-        <div className="flex justify-center pt-2">
-          <button className="btn-primary flex items-center gap-2" type="submit" disabled={isSubmitting}>
-            <span>
-              {isSubmitting ? "Analyzing symptoms..." : "Start AI Diagnosis"}
-            </span>
-            {!isSubmitting && <span aria-hidden="true">&rarr;</span>}
-          </button>
-        </div>
-      </form>
-
-      <div className="card p-6">
-        <h2 className="text-lg font-semibold text-slate-900">AI Analysis Progress</h2>
-        <p className="mt-2 text-sm text-slate-600">
-          Possible conditions remaining: {remainingCases ?? "--"}
-        </p>
-        {engine && (
-          <p className="mt-2 text-sm text-slate-600">
-            AI Engine: {formatEngine(engine)}
-          </p>
-        )}
-        <p className="mt-2 text-sm text-slate-600">
-          The AI is narrowing possible conditions based on your answers.
-        </p>
-      </div>
-
-      {followUpQuestion && (
-        <div className="fade-in card p-6">
-          <h2 className="text-lg font-semibold text-slate-900">Follow-up Question</h2>
+      {followUpQuestion ? (
+        <div className="fade-in card p-8">
+          <p className="eyebrow">Follow-up</p>
+          <h2 className="mt-2 text-lg font-semibold text-slate-900">
+            Follow-up Question
+          </h2>
           <p className="mt-2 text-sm text-slate-600">{followUpQuestion}</p>
-          <div className="mt-4 flex gap-3">
+          <div className="mt-6 flex gap-3">
             {"Yes,No".split(",").map((label) => {
               const value = label.toLowerCase();
               const isActive = followUpAnswer === value;
@@ -399,6 +247,146 @@ const Diagnosis = () => {
             })}
           </div>
         </div>
+      ) : (
+        <form
+          className="card mx-auto max-w-4xl space-y-4 p-8"
+          onSubmit={handleSubmit}
+        >
+          <div className="border-t border-slate-200 pt-6">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
+                <label
+                  className="mb-1 block text-sm font-medium text-slate-700"
+                  htmlFor="age"
+                >
+                  Age
+                </label>
+                <input
+                  id="age"
+                  type="number"
+                  min="0"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition duration-200 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
+                  value={formValues.age}
+                  onChange={handleChange("age")}
+                />
+              </div>
+
+              <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
+                <label
+                  className="mb-1 block text-sm font-medium text-slate-700"
+                  htmlFor="sex"
+                >
+                  Sex
+                </label>
+                <CustomDropdown
+                  id="sex"
+                  value={formValues.sex}
+                  onChange={(val) =>
+                    setFormValues((prev) => ({ ...prev, sex: val }))
+                  }
+                  options={"male,female".split(",")}
+                  placeholder="Select"
+                />
+              </div>
+
+              <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
+                <label
+                  className="mb-1 block text-sm font-medium text-slate-700"
+                  htmlFor="bmi"
+                >
+                  BMI
+                </label>
+                <input
+                  id="bmi"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition duration-200 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
+                  value={formValues.bmi}
+                  onChange={handleChange("bmi")}
+                />
+              </div>
+
+              <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
+                <label
+                  className="mb-1 block text-sm font-medium text-slate-700"
+                  htmlFor="bloodPressure"
+                >
+                  Blood Pressure
+                </label>
+                <input
+                  id="bloodPressure"
+                  type="number"
+                  min="0"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition duration-200 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
+                  value={formValues.bloodPressure}
+                  onChange={handleChange("bloodPressure")}
+                />
+              </div>
+
+              <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
+                <label
+                  className="mb-1 block text-sm font-medium text-slate-700"
+                  htmlFor="bloodSugar"
+                >
+                  Blood Sugar
+                </label>
+                <input
+                  id="bloodSugar"
+                  type="number"
+                  min="0"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition duration-200 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
+                  value={formValues.bloodSugar}
+                  onChange={handleChange("bloodSugar")}
+                />
+              </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+              {[
+                { key: "diabetesHistory", label: "Diabetes history" },
+                { key: "hypertensionHistory", label: "Hypertension history" },
+                { key: "smoking", label: "Smoking" },
+                { key: "alcohol", label: "Alcohol use" },
+                { key: "familyHeartDisease", label: "Family heart disease" },
+                { key: "recentInfection", label: "Recent infection" },
+                { key: "chronicDisease", label: "Chronic disease history" },
+              ].map((field) => (
+                <div
+                  className="rounded-lg p-2 transition duration-150 hover:bg-slate-50"
+                  key={field.key}
+                >
+                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                    {field.label}
+                  </label>
+                  <CustomDropdown
+                    value={formValues[field.key]}
+                    onChange={(val) =>
+                      setFormValues((prev) => ({ ...prev, [field.key]: val }))
+                    }
+                    options={"no,yes".split(",")}
+                    placeholder="Select"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {error && <p className="text-sm text-rose-600">{error}</p>}
+
+          {isSubmitting && (
+            <p className="text-sm text-slate-500">Analyzing symptoms...</p>
+          )}
+
+          <div className="flex justify-center pt-2">
+            <button className="btn-primary flex items-center gap-2" type="submit" disabled={isSubmitting}>
+              <span>
+                {isSubmitting ? "Analyzing symptoms..." : "Start AI Diagnosis"}
+              </span>
+              {!isSubmitting && <span aria-hidden="true">&rarr;</span>}
+            </button>
+          </div>
+        </form>
       )}
     </section>
   );

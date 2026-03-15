@@ -122,7 +122,7 @@ const Landing = () => {
               <p className="text-xs uppercase tracking-widest text-slate-400">
                 Coverage
               </p>
-              <p className="mt-2 text-2xl font-semibold text-slate-900">120+</p>
+              <p className="mt-2 text-2xl font-semibold text-slate-900">440+</p>
               <p className="text-xs text-slate-500">Conditions monitored</p>
             </div>
             <div>
