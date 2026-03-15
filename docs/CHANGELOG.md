@@ -6,61 +6,90 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 11:56am (Added by Hitesh)
+
+### Added
+
+- Added Frontend branch's Vite + React + Tailwind frontend scaffold with routing, core pages (Landing, Diagnosis, Results, User/Admin panels), and basic auth flows.
+- Added Frontend branch's frontend UI components and charts to present diagnosis predictions, follow-up questions, and explainable symptom insights.
+
+### Changed
+
+- Moved .dockerignore to the repository root and expanded Docker build context exclusions.
+
+### Changed
+
+- Changed the CHANGELOG.md to match the correct working workflow between main branch and Frontend branch.
+
 ## 2026-03-15 11:33pm (Added by Hitesh)
 
 ### Changed
 
 - Moved .dockerignore to the repository root and expanded Docker build context exclusions.
 
-## 2026-03-15 (Added by Tamoghno)
+## 2026-03-15 10:51am (Added by Tamoghno)
 
 ### Added
 
 - Added PDF report generation service and diagnosis report download endpoint.
 
-## 2026-03-15 (Added by Tamoghno)
+
+## 2026-03-15 04:14am (Added by Debadrita)
+
+### Changed
+
+- Replaced the generic dashboard with new User Panel and Admin Panel views, updating navigation and routes accordingly.
+
+## 2026-03-15 04:10am (Added by Tamoghno)
 
 ### Changed
 
 - Optimized backend Dockerfile with multi-stage build and minimal source copy.
 
-## 2026-03-15 (Added by Tamoghno)
-
-### Changed
-
-- Optimized backend Dockerfile with multi-stage build and minimal source copy.
-
-## 2026-03-15 (Added by Tamoghno)
+## 2026-03-15 03:58am (Added by Tamoghno)
 
 ### Changed
 
 - Expanded backend .dockerignore to exclude build outputs, coverage, and env files.
 
-## 2026-03-15 (Added by Tamoghno)
+## 2026-03-15 03:51am (Added by Debadrita)
 
 ### Changed
 
-- Expanded backend .dockerignore to exclude build outputs, coverage, and env files.
+- Rewrote the Diagnosis page to restore clean JSX structure while preserving existing state, payloads, and AI question flow.
+- Replaced diagnosis select fields with a custom dropdown component for consistent hover styling and animations.
 
-## 2026-03-15 (Added by Tamoghno)
+## 2026-03-15 03:43am (Added by Tamoghno)
 
 ### Added
 
 - Added backend .dockerignore to reduce Docker build context size.
 
-## 2026-03-15 (Added by Tamoghno)
+## 2026-03-15 03:28am (Added by Tamoghno)
 
 ### Changed
 
 - Removed obsolete docker-compose version field to silence compose warnings.
 
-## 2026-03-15 (Added by Tamoghno)
+## 2026-03-15 03:22am (Added by Debadrita)
 
 ### Changed
 
-- Removed obsolete docker-compose version field to silence compose warnings.
+- Applied glassmorphism styling, hover animations, and consistent spacing to landing, diagnosis, and dashboard pages to match auth UI styling.
 
-## 2026-03-15 (Added by Tamoghno)
+## 2026-03-15 03:15am (Added by Debadrita)
+
+### Changed
+
+- Removed frontend route gating so all pages are publicly accessible while keeping auth pages for demo use.
+
+## 2026-03-15 02:43am (Added by Debadrita)
+
+### Changed
+
+- Refined auth UI with glassmorphism cards, gradient backgrounds, animated buttons, and improved navbar auth display.
+
+## 2026-03-15 02:41am (Added by Tamoghno)
 
 ### Added
 
@@ -72,6 +101,13 @@
 - Updated backend .env with JWT defaults for container configuration.
 - Updated .gitignore to exclude local database files and pytest cache.
 
+## 2026-03-15 02:16am (Added by Debadrita)
+
+### Added
+
+- Implemented frontend authentication with Register and Login pages using JWT storage in localStorage.
+- Protected diagnosis, results, and dashboard routes using a ProtectedRoute gate.
+
 ## 2026-03-15 02:16am (Added by Tamoghno)
 
 ### Changed
@@ -80,20 +116,7 @@
 
 ### Changed
 
-- Updated auth tests to use unique emails for repeatable test runs.
-
-### Changed
-
 - Fixed a syntax error in settings configuration initialization.
-
-### Changed
-
-- Fixed a syntax error in settings configuration initialization.
-
-### Changed
-
-- Updated Pydantic settings and schemas to non-deprecated config patterns.
-- Replaced FastAPI startup event with lifespan handler to remove deprecation warnings.
 
 ### Changed
 
@@ -122,6 +145,12 @@
 
 - Trimmed backend requirements.txt to only the packages used by the current backend code.
 
+## 2026-03-15 12:10am (Added by Debadrita)
+
+### Changed
+
+- Refactored the Diagnosis page to use structured patient intake, AI question flow, progress tracking, and engine reporting instead of free-text symptoms.
+
 ## 2026-03-14 11:37pm (Added by Tamoghno)
 
 ### Added
@@ -131,6 +160,38 @@
 ### Changed
 
 - Added vector-based diagnosis inference for session results.
+
+## 2026-03-14 11:28pm (Added by Debadrita)
+
+### Changed
+
+- Expanded the landing page with hero, how-it-works, and key features sections with a Start Diagnosis CTA.
+- Added follow-up question handling, loading feedback, and history storage to the Diagnosis flow.
+- Enhanced the Dashboard to display stored diagnosis history entries.
+
+## 2026-03-14 10:37pm (Added by Debadrita)
+
+### Changed
+
+- Applied a healthcare dashboard UI refresh with a rose gradient background, updated navigation styling, and card layouts using rounded corners and soft shadows.
+  
+## 2026-03-14 10:29pm (Added by Debadrita)
+
+### Added
+
+- Built the Results page to render top predictions, probability percentages, a Recharts bar chart, and explainable symptom contributors from backend responses
+
+## 2026-03-14 10:22pm (Added by Debadrita)
+
+### Changed
+
+- Updated the frontend Navbar links to match the required navigation routes (Home, Diagnosis, Dashboard).
+
+## 2026-03-14 09:52pm (Added by Debadrita)
+
+### Added
+
+- Added a Vite + React + Tailwind + React Router frontend scaffold for SymptoScan, including base routing, pages, components, and an API service stub.
 
 ## 2026-03-14 07:37pm (Added by Hitesh)
 
