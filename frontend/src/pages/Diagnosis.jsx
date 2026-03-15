@@ -24,6 +24,8 @@ const Diagnosis = () => {
   const [followUpAnswer, setFollowUpAnswer] = useState(null);
   const [remainingCases, setRemainingCases] = useState(null);
   const [engine, setEngine] = useState("");
+  const [sessionId, setSessionId] = useState(null);
+  const [currentSymptom, setCurrentSymptom] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (field) => (event) => {
@@ -46,16 +48,35 @@ const Diagnosis = () => {
   const handleResponse = (data) => {
     updateProgress(data);
 
+    if (data?.session_id) {
+      setSessionId(data.session_id);
+    }
+
+    if (data?.symptom) {
+      setCurrentSymptom(data.symptom);
+    }
+
     if (data?.question) {
       setFollowUpQuestion(data.question);
       return;
     }
 
-    sessionStorage.setItem("diagnosisResponse", JSON.stringify(data));
+    const finalResult = data?.predictions ?? data;
+    sessionStorage.setItem("diagnosisResponse", JSON.stringify(finalResult));
+    if (data?.positive_symptoms) {
+      sessionStorage.setItem(
+        "diagnosisSymptoms",
+        JSON.stringify(data.positive_symptoms),
+      );
+    } else {
+      sessionStorage.removeItem("diagnosisSymptoms");
+    }
 
     const historyEntry = {
-      symptoms: ["Risk factor intake"],
-      topPrediction: getTopPrediction(data),
+      symptoms: data?.positive_symptoms?.length
+        ? data.positive_symptoms
+        : ["Risk factor intake"],
+      topPrediction: getTopPrediction(finalResult),
       timestamp: new Date().toISOString(),
     };
     const existingHistory = JSON.parse(
@@ -74,18 +95,22 @@ const Diagnosis = () => {
     setError("");
     setFollowUpQuestion("");
     setFollowUpAnswer(null);
+    setSessionId(null);
+    setCurrentSymptom("");
 
     setIsSubmitting(true);
 
     try {
+      const optionalNumber = (value) => (value === "" ? undefined : Number(value));
+
       const payload = {
-        age: Number(formValues.age),
+        age: optionalNumber(formValues.age),
         sex: formValues.sex,
-        bmi: Number(formValues.bmi),
-        blood_pressure: Number(formValues.bloodPressure),
-        blood_sugar: Number(formValues.bloodSugar),
-        diabetes_history: formValues.diabetesHistory === "yes",
-        hypertension_history: formValues.hypertensionHistory === "yes",
+        bmi: optionalNumber(formValues.bmi),
+        bp: optionalNumber(formValues.bloodPressure),
+        blood_sugar: optionalNumber(formValues.bloodSugar),
+        diabetes: formValues.diabetesHistory === "yes",
+        hypertension: formValues.hypertensionHistory === "yes",
         smoking: formValues.smoking === "yes",
         alcohol: formValues.alcohol === "yes",
         family_heart_disease: formValues.familyHeartDisease === "yes",
@@ -93,7 +118,7 @@ const Diagnosis = () => {
         chronic_disease: formValues.chronicDisease === "yes",
       };
 
-      const response = await fetch(buildApiUrl("/api/diagnose"), {
+      const response = await fetch(buildApiUrl("/diagnosis/start"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -117,15 +142,23 @@ const Diagnosis = () => {
   const handleAnswer = async (answer) => {
     setFollowUpAnswer(answer);
     setError("");
+    if (!sessionId || !currentSymptom) {
+      setError("Diagnosis session not initialized. Please restart.");
+      return;
+    }
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(buildApiUrl("/api/diagnose"), {
+      const response = await fetch(buildApiUrl("/diagnosis/answer"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ answer }),
+        body: JSON.stringify({
+          session_id: sessionId,
+          symptom: currentSymptom,
+          answer: answer === "yes",
+        }),
       });
 
       if (!response.ok) {
@@ -142,6 +175,15 @@ const Diagnosis = () => {
   };
 
   const getTopPrediction = (data) => {
+    if (Array.isArray(data?.diseases) && Array.isArray(data?.probabilities)) {
+      const paired = data.diseases.map((disease, index) => ({
+        label: disease,
+        score: Number(data.probabilities[index] ?? 0),
+      }));
+      const sorted = paired.sort((a, b) => b.score - a.score);
+      return sorted[0]?.label || "Unknown";
+    }
+
     const candidates =
       data?.predictions ||
       data?.results ||

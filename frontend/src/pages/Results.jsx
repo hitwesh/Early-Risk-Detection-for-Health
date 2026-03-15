@@ -25,8 +25,22 @@ const normalizePredictions = (raw) => {
     return [];
   }
 
+  const normalizedRaw = raw?.predictions ?? raw;
   const candidates =
-    raw.predictions || raw.results || raw.top_predictions || raw.topPredictions;
+    normalizedRaw?.predictions ||
+    normalizedRaw?.results ||
+    normalizedRaw?.top_predictions ||
+    normalizedRaw?.topPredictions;
+
+  if (
+    Array.isArray(normalizedRaw?.diseases) &&
+    Array.isArray(normalizedRaw?.probabilities)
+  ) {
+    return normalizedRaw.diseases.map((disease, index) => ({
+      disease,
+      probability: coercePercent(normalizedRaw.probabilities[index] ?? 0),
+    }));
+  }
 
   if (!Array.isArray(candidates)) {
     return [];
@@ -52,7 +66,10 @@ const extractExplainableSymptoms = (raw) => {
   const fromExplainability =
     raw.explainability?.symptoms || raw.explainability?.contributors;
   const fromTopLevel =
-    raw.explainable_symptoms || raw.explainableSymptoms || raw.contributors;
+    raw.key_symptoms ||
+    raw.explainable_symptoms ||
+    raw.explainableSymptoms ||
+    raw.contributors;
   const symptoms = fromExplainability || fromTopLevel || [];
 
   if (!Array.isArray(symptoms)) {

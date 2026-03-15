@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 12:32pm (Added by Hitesh)
+
+### Changed
+
+- Mapped frontend API calls to backend auth and diagnosis routes with aligned payload fields and response parsing.
+
 ## 2026-03-15 12:24pm (Added by Hitesh)
 
 ### Changed

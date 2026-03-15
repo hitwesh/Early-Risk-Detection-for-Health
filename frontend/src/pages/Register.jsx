@@ -30,7 +30,6 @@ const Register = () => {
 
     try {
       await registerUser({
-        name: formValues.name,
         email: formValues.email,
         password: formValues.password,
       });

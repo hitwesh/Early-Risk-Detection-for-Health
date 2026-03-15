@@ -1,7 +1,7 @@
 import { buildApiUrl } from "./api.js";
 
 export const loginUser = async (credentials) => {
-  const response = await fetch(buildApiUrl("/api/auth/login"), {
+  const response = await fetch(buildApiUrl("/auth/login"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -17,12 +17,15 @@ export const loginUser = async (credentials) => {
   if (data?.access_token) {
     localStorage.setItem("authToken", data.access_token);
   }
+  if (credentials?.email) {
+    localStorage.setItem("userEmail", credentials.email);
+  }
 
   return data;
 };
 
 export const registerUser = async (userData) => {
-  const response = await fetch(buildApiUrl("/api/auth/register"), {
+  const response = await fetch(buildApiUrl("/auth/register"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -41,4 +44,5 @@ export const getToken = () => localStorage.getItem("authToken");
 
 export const logoutUser = () => {
   localStorage.removeItem("authToken");
+  localStorage.removeItem("userEmail");
 };

@@ -25,7 +25,7 @@ const Login = () => {
         email: formValues.email,
         password: formValues.password,
       });
-      navigate("/dashboard");
+      navigate("/user");
     } catch (err) {
       setError(err.message ?? "Unable to log in.");
     } finally {
