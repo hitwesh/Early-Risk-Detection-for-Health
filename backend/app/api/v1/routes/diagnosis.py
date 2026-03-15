@@ -17,6 +17,7 @@ from app.schemas.diagnosis_schema import (
 	DiagnosisStartRequest,
 )
 from app.services.diagnosis_service import (
+	build_risk_factor_map,
 	create_history_for_user,
 	get_history_entry_for_user,
 	get_history_for_user,
@@ -53,7 +54,14 @@ def predict_disease(
 		symptoms=normalized_symptoms,
 		risk_factors=data.dict(),
 	)
-	record = create_history_for_user(db, current_user.id, normalized_symptoms, result)
+	result["risk_factors"] = build_risk_factor_map(data.dict())
+	record = create_history_for_user(
+		db,
+		current_user.id,
+		normalized_symptoms,
+		result,
+		risk_factor_data=data.dict(),
+	)
 	result["history_id"] = record.id
 
 	return result
@@ -122,6 +130,7 @@ def answer_question(
 
 	update_symptom(req.session_id, symptom_index, normalized_symptom, req.answer)
 	prediction = predict_from_vector(session["vector"], session["risk_factors"])
+	prediction["risk_factors"] = build_risk_factor_map(session.get("risk_factors"))
 	max_probability = max(prediction["probabilities"]) if prediction["probabilities"] else 0.0
 	if is_session_finished(session, len(artifacts.symptom_names), max_probability=max_probability):
 		record = create_history_for_user(
@@ -129,6 +138,7 @@ def answer_question(
 			current_user.id,
 			session["positive_symptoms"],
 			prediction,
+			risk_factor_data=session.get("risk_factors"),
 		)
 		return {
 			"finished": True,
@@ -148,6 +158,7 @@ def answer_question(
 			current_user.id,
 			session["positive_symptoms"],
 			prediction,
+			risk_factor_data=session.get("risk_factors"),
 		)
 		return {
 			"finished": True,
@@ -184,6 +195,7 @@ def get_result(
 		raise HTTPException(status_code=404, detail="Session not found")
 
 	result = predict_from_vector(session["vector"], session["risk_factors"])
+	result["risk_factors"] = build_risk_factor_map(session.get("risk_factors"))
 	result["elapsed_seconds"] = time.time() - session["started_at"]
 	return result
 

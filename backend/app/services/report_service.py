@@ -57,9 +57,21 @@ def _draw_symptoms(pdf, y, symptoms: list[str] | None):
 	return y
 
 
-def _draw_risk_factors(pdf, y, risk_factors: list[str] | None):
+def _format_risk_factor_label(key: str) -> str:
+	label = key.replace("_", " ")
+	return label[:1].upper() + label[1:]
+
+
+def _draw_risk_factors(pdf, y, risk_factors):
 	if not risk_factors:
 		return y
+	if isinstance(risk_factors, dict):
+		active = [
+			_format_risk_factor_label(key)
+			for key, is_active in risk_factors.items()
+			if is_active
+		]
+		risk_factors = active
 	y = _ensure_space(pdf, y, 40)
 	pdf.setFont("Helvetica-Bold", 12)
 	pdf.drawString(60, y, "Risk Factors")

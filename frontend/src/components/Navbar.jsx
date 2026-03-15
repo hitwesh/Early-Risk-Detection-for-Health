@@ -42,10 +42,12 @@ const Navbar = () => {
     <nav className="nav-shell px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="mr-6 flex items-center gap-2 text-lg font-semibold text-slate-900">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-900 text-white">
-              S
-            </span>
+          <span className="mr-6 flex items-center gap-3 text-lg font-semibold text-slate-900">
+            <img
+              src="/sympto-scan.png"
+              alt="SymptoScan"
+              className="h-11 w-11 rounded-full border border-slate-200 bg-white object-contain shadow-sm"
+            />
             <span className="font-display">SymptoScan</span>
           </span>
           <NavLink className={navLinkClass} to="/">

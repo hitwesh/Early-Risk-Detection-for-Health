@@ -91,6 +91,23 @@ const UserPanel = () => {
   const latestEntry = history[0];
   const totalDiagnoses = history.length;
 
+  const riskFactorLabels = {
+    diabetes: "Diabetes",
+    hypertension: "Hypertension",
+    smoking: "Smoking",
+    alcohol: "Alcohol use",
+    family_heart_disease: "Family heart disease",
+    recent_infection: "Recent infection",
+    pregnancy: "Pregnancy",
+    chronic_disease: "Chronic disease",
+  };
+
+  const riskFactorKeys = Object.keys(riskFactorLabels);
+  const selectedRiskFactors = selectedEntry?.risk_factors;
+  const riskFactorSet = new Set(
+    Array.isArray(selectedRiskFactors) ? selectedRiskFactors : [],
+  );
+
   const handleDownloadSelected = async () => {
     if (!selectedEntry) {
       setDownloadError("Select a diagnosis entry to download.");
@@ -214,14 +231,42 @@ const UserPanel = () => {
                     <span className="font-medium text-slate-900">Symptoms:</span>{" "}
                     {selectedEntry.symptoms.join(", ")}
                   </p>
-                  {selectedEntry.risk_factors?.length ? (
-                    <p>
-                      <span className="font-medium text-slate-900">
-                        Risk factors:
-                      </span>{" "}
-                      {selectedEntry.risk_factors.join(", ")}
+                  <div>
+                    <span className="font-medium text-slate-900">
+                      Risk factors:
+                    </span>
+                    <div className="mt-2 grid gap-2 text-sm text-slate-700 md:grid-cols-2">
+                      {riskFactorKeys.map((key) => {
+                        const isActive =
+                          typeof selectedRiskFactors === "object" &&
+                          !Array.isArray(selectedRiskFactors) &&
+                          selectedRiskFactors !== null
+                            ? Boolean(selectedRiskFactors[key])
+                            : riskFactorSet.has(key);
+                        return (
+                          <div
+                            key={key}
+                            className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2"
+                          >
+                            <span>{riskFactorLabels[key]}</span>
+                            <span
+                              className={
+                                isActive
+                                  ? "font-semibold text-emerald-700"
+                                  : "text-slate-400"
+                              }
+                            >
+                              {isActive ? "Yes" : "No"}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <p className="mt-2 text-xs text-slate-500">
+                      Age, sex, BMI, blood pressure, and blood sugar are treated as
+                      parameters and not shown as risk factors.
                     </p>
-                  ) : null}
+                  </div>
                   <div className="flex flex-wrap gap-3 pt-2">
                     <button
                       type="button"

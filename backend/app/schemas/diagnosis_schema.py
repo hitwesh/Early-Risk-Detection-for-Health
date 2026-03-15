@@ -24,7 +24,7 @@ class DiagnosisResponse(BaseModel):
 	diseases: list[str]
 	probabilities: list[float]
 	key_symptoms: Optional[list[str]] = None
-	risk_factors: Optional[list[str]] = None
+	risk_factors: Optional[dict[str, bool]] = None
 	elapsed_seconds: Optional[float] = None
 	history_id: Optional[int] = None
 
@@ -74,7 +74,7 @@ class DiagnosisHistoryOut(BaseModel):
 	top_prediction: str
 	diseases: list[str]
 	probabilities: list[float]
-	risk_factors: Optional[list[str]] = None
+	risk_factors: Optional[dict[str, bool]] = None
 	created_at: str
 
 

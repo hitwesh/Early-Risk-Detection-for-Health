@@ -12,7 +12,7 @@ def create_history(
 	top_prediction: str,
 	diseases: list[str],
 	probabilities: list[float],
-	risk_factors: list[str] | None,
+	risk_factors: dict | list | None,
 ):
 	record = DiagnosisHistory(
 		user_id=user_id,

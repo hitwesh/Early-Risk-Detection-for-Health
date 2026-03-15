@@ -6,6 +6,24 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 02:40pm (Added by Hitesh)
+
+### Changed
+
+- Normalized diagnosis responses to return risk factor decisions as a boolean map to satisfy FastAPI response validation.
+
+### Changed
+
+- Persisted risk factor decisions as Yes/No values in history, normalized legacy entries, and updated reports/UI to display clean labels without underscores.
+
+### Changed
+
+- Cleaned risk factor display in the user panel by removing underscores, showing Yes/No status, and excluding parameter fields like age, BMI, and BP.
+
+### Changed
+
+- Added the SymtoScan logo image to the application navbar and served it from the public assets folder.
+
 ## 2026-03-15 02:27pm (Added by Hitesh)
 
 ### Changed
