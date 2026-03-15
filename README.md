@@ -125,6 +125,20 @@ npm run dev
 python -c "from dataset_cache import load_cached_dataset; load_cached_dataset()"
 ```
 
+### Model Artifacts (Render / no model in git)
+
+If the model files are not in git, download them before starting the backend:
+
+```bash
+python backend/download_models.py
+```
+
+The script reads `MODEL_PATH` to decide where to place `disease_model.pt` and uses `DATA_CACHE_DIR` for `X.npy`, `y.npy`, and `symptom_names.npy`.
+Defaults:
+
+- `MODEL_PATH=../ai-model/disease_model.pt`
+- `DATA_CACHE_DIR=backend`
+
 ## Security
 
 - JWT authentication
