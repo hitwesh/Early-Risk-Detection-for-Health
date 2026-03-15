@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 01:08pm (Added by Hitesh)
+
+### Changed
+
+- Made user diagnosis history scrollable and clickable with per-entry detail and confidence chart views.
+
 ## 2026-03-15 01:03pm (Added by Hitesh)
 
 ### Changed
