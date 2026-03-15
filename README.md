@@ -6,8 +6,8 @@ Built for a MedTech Hackathon by CTRL-C & CTRL-V.
 
 ![Front page](image/Screenshot%202026-03-15%20155315.png)
 
-Demo video: https://drive.google.com/file/d/1l1KDMydGJV2-N1hdOQ8Dr-Cd_d7rmSgA/view?usp=sharing
-Main website: https://early-risk-detection-for-health.onrender.com/
+**Main website (public):** https://early-risk-detection-for-health.onrender.com/
+**Demo video:** https://drive.google.com/file/d/1l1KDMydGJV2-N1hdOQ8Dr-Cd_d7rmSgA/view?usp=sharing
 
 ## Table of Contents
 
