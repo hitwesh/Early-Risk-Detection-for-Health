@@ -4,6 +4,8 @@ AI-powered symptom analysis that predicts possible diseases early and helps user
 
 Built for a MedTech Hackathon by CTRL-C & CTRL-V.
 
+![Front page](image/Screenshot%202026-03-15%20155315.png)
+
 ## Table of Contents
 
 - Overview
