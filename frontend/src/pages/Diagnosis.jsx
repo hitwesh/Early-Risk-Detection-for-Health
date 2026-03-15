@@ -220,7 +220,7 @@ const Diagnosis = () => {
   };
 
   return (
-    <section className="fade-in space-y-8">
+    <section className="fade-in min-h-[75vh] space-y-8 pb-16">
       <div>
         <p className="eyebrow">Patient intake</p>
         <h1 className="mt-2 font-display text-3xl text-slate-900">

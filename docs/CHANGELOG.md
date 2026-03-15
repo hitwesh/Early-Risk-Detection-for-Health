@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 03:37pm (Added by Hitesh)
+
+### Changed
+
+- Widened the Diagnosis intake card and tuned the page spacing so the footer sits lower on the Diagnosis route only.
+
 ## 2026-03-15 03:07pm (Added by Hitesh)
 
 ### Changed
