@@ -35,3 +35,11 @@ def list_history_by_user(db: Session, user_id: int):
 		.order_by(DiagnosisHistory.created_at.desc())
 		.all()
 	)
+
+
+def delete_history_by_user(db: Session, user_id: int):
+	return (
+		db.query(DiagnosisHistory)
+		.filter(DiagnosisHistory.user_id == user_id)
+		.delete(synchronize_session=False)
+	)

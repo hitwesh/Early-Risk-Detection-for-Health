@@ -1,6 +1,6 @@
 from datetime import timezone
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import distinct, func
 from sqlalchemy.orm import Session
 
@@ -10,6 +10,8 @@ from app.models.diagnosis import DiagnosisHistory
 from app.models.user import User
 from app.schemas.diagnosis_schema import AdminStatsOut, AdminUserHistoryOut
 from app.services.diagnosis_service import get_history_for_user
+from app.repositories.diagnosis_repo import delete_history_by_user
+from app.repositories.user_repo import delete_user
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
 
@@ -59,3 +61,21 @@ def get_admin_users(
 		)
 
 	return results
+
+
+@router.delete("/users/{user_id}")
+def delete_admin_user(
+	user_id: int,
+	current_admin: User = Depends(get_current_admin),
+	db: Session = Depends(get_db),
+):
+	if user_id == current_admin.id:
+		raise HTTPException(status_code=400, detail="Cannot delete your own account")
+
+	user = db.query(User).filter(User.id == user_id).first()
+	if user is None:
+		raise HTTPException(status_code=404, detail="User not found")
+
+	delete_history_by_user(db, user_id)
+	delete_user(db, user)
+	return {"status": "deleted", "user_id": user_id}

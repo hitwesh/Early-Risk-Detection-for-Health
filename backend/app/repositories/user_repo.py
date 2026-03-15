@@ -13,3 +13,8 @@ def create_user(db: Session, email: str, password: str):
 	db.commit()
 	db.refresh(user)
 	return user
+
+
+def delete_user(db: Session, user: User):
+	db.delete(user)
+	db.commit()

@@ -9,7 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { getAdminStats, getAdminUsers } from "../services/auth.js";
+import { deleteAdminUser, getAdminStats, getAdminUsers } from "../services/auth.js";
 
 const coercePercent = (value) => {
   const numeric = Number(value);
@@ -29,6 +29,7 @@ const AdminPanel = () => {
   const [selectedEntryId, setSelectedEntryId] = useState(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -86,6 +87,36 @@ const AdminPanel = () => {
       probability: coercePercent(selectedEntry.probabilities?.[index] ?? 0),
     }));
   }, [selectedEntry]);
+
+  const handleDeleteUser = async (user) => {
+    if (!user) {
+      return;
+    }
+    const confirmed = window.confirm(
+      `Delete ${user.email} and all diagnosis history? This cannot be undone.`,
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      await deleteAdminUser(user.id);
+      const refreshedUsers = await getAdminUsers();
+      setUsers(Array.isArray(refreshedUsers) ? refreshedUsers : []);
+      if (Array.isArray(refreshedUsers) && refreshedUsers.length > 0) {
+        setSelectedUserId(refreshedUsers[0].id);
+        setSelectedEntryId(refreshedUsers[0].history?.[0]?.id ?? null);
+      } else {
+        setSelectedUserId(null);
+        setSelectedEntryId(null);
+      }
+    } catch (err) {
+      setError("Unable to delete user.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100">
@@ -187,7 +218,7 @@ const AdminPanel = () => {
                 User Details
               </h2>
               {selectedUser ? (
-                <div className="mt-3 space-y-2 text-sm text-slate-700">
+                <div className="mt-3 space-y-3 text-sm text-slate-700">
                   <p>
                     <span className="font-medium text-slate-900">Email:</span>{" "}
                     {selectedUser.email}
@@ -204,6 +235,16 @@ const AdminPanel = () => {
                       ? new Date(selectedUser.latest_diagnosis_at).toLocaleString()
                       : "No records"}
                   </p>
+                  <div>
+                    <button
+                      type="button"
+                      className="rounded-lg border border-rose-200 bg-white px-4 py-2 text-sm font-medium text-rose-700 transition duration-200 hover:border-rose-300 hover:bg-rose-50"
+                      onClick={() => handleDeleteUser(selectedUser)}
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? "Deleting..." : "Delete User"}
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <p className="mt-3 text-sm text-slate-600">

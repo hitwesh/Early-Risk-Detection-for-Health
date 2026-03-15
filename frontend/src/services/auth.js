@@ -120,6 +120,24 @@ export const getAdminUsers = async () => {
   return response.json();
 };
 
+export const deleteAdminUser = async (userId) => {
+  const response = await fetch(buildApiUrl(`/admin/users/${userId}`), {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      ...buildAuthHeaders(),
+    },
+  });
+
+  if (!response.ok) {
+    const error = new Error("Unable to delete user.");
+    error.status = response.status;
+    throw error;
+  }
+
+  return response.json();
+};
+
 export const logoutUser = () => {
   localStorage.removeItem("authToken");
   localStorage.removeItem("userEmail");

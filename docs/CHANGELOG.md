@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 01:37pm (Added by Hitesh)
+
+### Changed
+
+- Added admin delete-user capability with confirmation and backend cleanup of diagnosis history.
+
 ## 2026-03-15 01:33pm (Added by Hitesh)
 
 ### Changed
