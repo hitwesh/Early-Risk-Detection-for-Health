@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 01:33pm (Added by Hitesh)
+
+### Changed
+
+- Hid the admin navigation link for non-admin users and redirected /admin to user/login when unauthorized.
+
 ### 2023-03-15 01:29pm (Added by Hitesh)
 
 ### Changed

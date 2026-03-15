@@ -69,6 +69,23 @@ export const getUserHistory = async () => {
   return response.json();
 };
 
+export const getCurrentUser = async () => {
+  const response = await fetch(buildApiUrl("/users/me"), {
+    headers: {
+      "Content-Type": "application/json",
+      ...buildAuthHeaders(),
+    },
+  });
+
+  if (!response.ok) {
+    const error = new Error("Unable to load user profile.");
+    error.status = response.status;
+    throw error;
+  }
+
+  return response.json();
+};
+
 export const getAdminStats = async () => {
   const response = await fetch(buildApiUrl("/admin/stats"), {
     headers: {

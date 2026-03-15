@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Bar,
   BarChart,
@@ -28,6 +29,7 @@ const AdminPanel = () => {
   const [selectedEntryId, setSelectedEntryId] = useState(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadAdminData = async () => {
@@ -49,8 +51,12 @@ const AdminPanel = () => {
       } catch (err) {
         if (err?.status === 403) {
           setError("Admin access required.");
+          navigate("/user");
+          return;
         } else if (err?.status === 401) {
           setError("Login required to view admin dashboard.");
+          navigate("/login");
+          return;
         } else {
           setError("Unable to load admin dashboard data.");
         }
@@ -62,7 +68,7 @@ const AdminPanel = () => {
     };
 
     loadAdminData();
-  }, []);
+  }, [navigate]);
 
   const selectedUser =
     users.find((user) => user.id === selectedUserId) || users[0];

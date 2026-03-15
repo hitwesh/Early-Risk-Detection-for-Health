@@ -1,5 +1,6 @@
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { getToken, logoutUser } from "../services/auth.js";
+import { getCurrentUser, getToken, logoutUser } from "../services/auth.js";
 
 const Navbar = () => {
   const baseClass =
@@ -7,6 +8,28 @@ const Navbar = () => {
   const navigate = useNavigate();
   const isAuthenticated = Boolean(getToken());
   const userEmail = localStorage.getItem("userEmail");
+  const [userRole, setUserRole] = useState("user");
+
+  useEffect(() => {
+    const loadUser = async () => {
+      if (!isAuthenticated) {
+        setUserRole("user");
+        return;
+      }
+
+      try {
+        const user = await getCurrentUser();
+        if (user?.email) {
+          localStorage.setItem("userEmail", user.email);
+        }
+        setUserRole(user?.role ?? "user");
+      } catch (err) {
+        setUserRole("user");
+      }
+    };
+
+    loadUser();
+  }, [isAuthenticated]);
 
   const handleLogout = () => {
     logoutUser();
@@ -29,9 +52,11 @@ const Navbar = () => {
           <NavLink className={baseClass} to="/user">
             User Panel
           </NavLink>
-          <NavLink className={baseClass} to="/admin">
-            Admin
-          </NavLink>
+          {isAuthenticated && userRole === "admin" && (
+            <NavLink className={baseClass} to="/admin">
+              Admin
+            </NavLink>
+          )}
         </div>
         <div className="flex items-center gap-2">
           {isAuthenticated ? (
