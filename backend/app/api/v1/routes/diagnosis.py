@@ -55,13 +55,13 @@ def predict_disease(
 def start_diagnosis(payload: DiagnosisStartRequest | None = None):
 	artifacts = get_model()
 	risk_factors = {}
-	use_bayes_engine = False
+	use_bayes_engine = True
 	max_questions = None
 	min_cases = None
 	confidence_stop = None
 	if payload is not None:
 		payload_data = payload.dict(exclude_none=True)
-		use_bayes_engine = payload_data.pop("use_bayes_engine", False)
+		use_bayes_engine = payload_data.pop("use_bayes_engine", True)
 		max_questions = payload_data.pop("max_questions", None)
 		min_cases = payload_data.pop("min_cases", None)
 		confidence_stop = payload_data.pop("confidence_stop", None)

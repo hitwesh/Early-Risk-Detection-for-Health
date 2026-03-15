@@ -48,7 +48,7 @@ class DiagnosisStartRequest(BaseModel):
 	recent_infection: Optional[bool] = None
 	pregnancy: Optional[bool] = None
 	chronic_disease: Optional[bool] = None
-	use_bayes_engine: bool = False
+	use_bayes_engine: bool = True
 	max_questions: int = Field(12, ge=1, le=50)
 	min_cases: int = Field(40, ge=1)
 	confidence_stop: float = Field(0.95, ge=0.5, le=1.0)

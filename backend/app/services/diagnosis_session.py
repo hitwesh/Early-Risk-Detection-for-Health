@@ -20,7 +20,7 @@ sessions = {}
 def create_session(
 	symptom_names,
 	disease_labels,
-	use_bayes_engine=False,
+	use_bayes_engine=True,
 	max_questions=MAX_QUESTIONS,
 	min_cases=MIN_CASES,
 	confidence_stop=CONFIDENCE_STOP,
@@ -99,27 +99,17 @@ def get_next_symptom(session, symptom_names):
 		return None, None, None
 
 	engine = "entropy"
-	if session["use_bayes_engine"] and len(session["X"]) > BAYESIAN_SWITCH_THRESHOLD:
-		engine = "bayesian"
+	if session["use_bayes_engine"] and session["bayes_probs"] is not None:
+		engine = "bayesian+entropy"
 
-	if engine == "bayesian":
-		idx = select_next_symptom(
-			session["bayes_probs"],
-			session["bayes_matrix"],
-			session["asked"],
-		)
-		if idx is None:
-			return None, None, engine
-		question = symptom_names[idx]
-	else:
-		symptom_counts = session["X"].sum(axis=0)
-		question, idx = next_best_question(
-			session["X"],
-			session["y"],
-			symptom_names,
-			session["asked"],
-			symptom_counts,
-		)
+	symptom_counts = session["X"].sum(axis=0)
+	question, idx = next_best_question(
+		session["X"],
+		session["y"],
+		symptom_names,
+		session["asked"],
+		symptom_counts,
+	)
 
 	session["last_engine"] = engine
 	return idx, question, engine

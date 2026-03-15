@@ -404,8 +404,11 @@ const Diagnosis = () => {
 
 const formatEngine = (engineValue) => {
   const normalized = engineValue.toLowerCase();
+  if (normalized.includes("bayes") && normalized.includes("entropy")) {
+    return "Bayesian Update + Entropy Selection";
+  }
   if (normalized.includes("bayes")) {
-    return "Bayesian Triage";
+    return "Bayesian Update";
   }
   if (normalized.includes("entropy")) {
     return "Entropy Selection";

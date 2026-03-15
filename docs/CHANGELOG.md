@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 01:03pm (Added by Hitesh)
+
+### Changed
+
+- Defaulted diagnosis sessions to use Bayesian updates with entropy-based question selection and updated engine labels.
+
 ## 2026-03-15 12:52pm (Added by Hitesh)
 
 ### Changed
