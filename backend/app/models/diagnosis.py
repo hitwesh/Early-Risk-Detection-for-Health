@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 
@@ -10,7 +10,7 @@ class DiagnosisHistory(Base):
 
 	id = Column(Integer, primary_key=True, index=True)
 	user_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
-	created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+	created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
 	symptoms = Column(Text, nullable=False)
 	top_prediction = Column(String, nullable=False)
 	diseases = Column(Text, nullable=False)

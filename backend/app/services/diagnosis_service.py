@@ -1,4 +1,5 @@
 import json
+from datetime import timezone
 
 from sqlalchemy.orm import Session
 
@@ -31,6 +32,9 @@ def get_history_for_user(db: Session, user_id: int):
 	records = list_history_by_user(db, user_id)
 	results = []
 	for record in records:
+		created_at = record.created_at
+		if created_at.tzinfo is None:
+			created_at = created_at.replace(tzinfo=timezone.utc)
 		results.append(
 			{
 				"id": record.id,
@@ -41,7 +45,7 @@ def get_history_for_user(db: Session, user_id: int):
 				"risk_factors": json.loads(record.risk_factors)
 				if record.risk_factors
 				else None,
-				"created_at": record.created_at.isoformat(),
+				"created_at": created_at.isoformat(),
 			}
 		)
 	return results

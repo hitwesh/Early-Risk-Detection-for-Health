@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 01:11pm (Added by Hitesh)
+
+### Changed
+
+- Stored diagnosis history timestamps as timezone-aware UTC and serialized them with timezone info for correct local display.
+
 ## 2026-03-15 01:08pm (Added by Hitesh)
 
 ### Changed
