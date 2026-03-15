@@ -3,7 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 
-DEFAULT_DATA_PATH = "../datasets/raw/disease_symptom_dataset.csv"
+DEFAULT_DATA_PATH = os.getenv("DATASET_CSV_PATH", "../datasets/raw/disease_symptom_dataset.csv")
+DEFAULT_CACHE_DIR = os.getenv("DATA_CACHE_DIR", ".")
 
 
 def _get_label_column(df):
@@ -14,7 +15,7 @@ def _get_label_column(df):
 	return df.columns[0]
 
 
-def load_cached_dataset(data_path=DEFAULT_DATA_PATH, cache_dir="."):
+def load_cached_dataset(data_path=DEFAULT_DATA_PATH, cache_dir=DEFAULT_CACHE_DIR):
 	x_path = os.path.join(cache_dir, "X.npy")
 	y_path = os.path.join(cache_dir, "y.npy")
 	symptom_path = os.path.join(cache_dir, "symptom_names.npy")

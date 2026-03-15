@@ -6,6 +6,14 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 05:11pm (Added by Hitesh)
+
+### Changed
+
+- Added a backend download script for model artifacts and dataset cache files for Render deployments without model files in git.
+- Allowed dataset cache and CSV path overrides via `DATA_CACHE_DIR` and `DATASET_CSV_PATH` environment variables.
+- Documented model artifact download steps and environment defaults in the README.
+
 ## 2026-03-15 03:37pm (Added by Hitesh)
 
 ### Changed
