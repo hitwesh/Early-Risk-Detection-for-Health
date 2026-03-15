@@ -1,6 +1,7 @@
 import time
 
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import StreamingResponse
 
 from app.ai.diagnosis_engine import normalize_symptom, predict_from_vector, run_diagnosis
 from app.ai.model_loader import get_model
@@ -21,6 +22,7 @@ from app.services.diagnosis_session import (
 	is_session_finished,
 	update_symptom,
 )
+from app.services.report_service import generate_diagnosis_report
 
 router = APIRouter(prefix="/diagnosis", tags=["Diagnosis"])
 
@@ -141,3 +143,19 @@ def get_result(session_id: str):
 	result = predict_from_vector(session["vector"], session["risk_factors"])
 	result["elapsed_seconds"] = time.time() - session["started_at"]
 	return result
+
+
+@router.post("/report")
+def generate_report(result: dict):
+	try:
+		pdf = generate_diagnosis_report(result)
+	except ValueError as exc:
+		raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+	return StreamingResponse(
+		pdf,
+		media_type="application/pdf",
+		headers={
+			"Content-Disposition": "attachment; filename=diagnosis_report.pdf",
+		},
+	)

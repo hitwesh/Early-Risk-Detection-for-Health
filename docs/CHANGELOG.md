@@ -8,6 +8,12 @@
 
 ## 2026-03-15 (Added by Tamoghno)
 
+### Added
+
+- Added PDF report generation service and diagnosis report download endpoint.
+
+## 2026-03-15 (Added by Tamoghno)
+
 ### Changed
 
 - Optimized backend Dockerfile with multi-stage build and minimal source copy.
