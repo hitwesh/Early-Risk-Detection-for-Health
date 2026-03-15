@@ -1,160 +1,41 @@
-# Early Health Risk Detection AI
+# SymptoScan — Early Health Risk Detection
 
 AI-powered symptom analysis that predicts possible diseases early and helps users understand potential health risks before serious illness occurs.
 
-Built for a MedTech Hackathon.
+Built for a MedTech Hackathon by CTRL-C & CTRL-V.
+
+## Table of Contents
+
+- Overview
+- Key Features
+- System Architecture
+- Project Structure
+- Model Details
+- Quick Start
+- Security
+- Screenshots
+- Visual Insights
+- Contributors
+- License & Copyright
 
 ## Overview
 
-Many serious illnesses begin with mild symptoms that people often ignore. This project builds an AI-driven diagnosis assistant that:
+Many serious illnesses begin with mild symptoms that people often ignore. SymptoScan is a decision-support assistant that:
 
 - analyzes symptoms
 - predicts possible diseases
 - asks targeted follow-up questions
 - provides risk insights
 
-NOTE: This system is not a medical diagnosis tool. It is a decision-support assistant.
+Disclaimer: This system is not a medical diagnosis tool.
 
 ## Key Features
 
-### 1) AI Symptom Analysis
-
-Users input symptoms and the AI predicts possible diseases using a trained neural network.
-
-Output includes:
-
-- top predicted diseases
-- probability scores
-- risk indication
-
-Example:
-
-Input symptoms:
-fever, cough, fatigue
-
-Predictions:
-
-    Flu -- 64%
-    Pneumonia -- 18%
-    Common Cold -- 10%
-    Bronchitis -- 6%
-    COVID-like illness -- 2%
-
-### 2) Dynamic AI Question Engine
-
-Instead of asking all symptoms, the system asks intelligent follow-up questions like a clinician.
-
-Example flow:
-
-User: fever
-
-AI:
-Do you have cough?
-
-User: yes
-
-AI:
-Are you experiencing shortness of breath?
-
-This reduces questioning from 377 symptoms to 6-8 questions.
-
-### 3) Symptom Relationship Modeling
-
-The system uses symptom embeddings and disease similarity graphs to model relationships between symptoms.
-
-Example:
-
-fever <-> cough <-> fatigue
-
-These relationships improve prediction accuracy and generalization.
-
-### 4) Explainable AI (XAI)
-
-The system can explain predictions by surfacing contributing symptoms.
-
-Prediction: Pneumonia
-
-Key contributing symptoms:
-
-- fever
-- cough
-- shortness of breath
-
-### 5) Risk Factor Weighting
-
-Predictions are refined using patient context (for example age, BMI, blood pressure, smoking, and history flags) to adjust disease probabilities in a clinically realistic way.
-
-### 6) Disease Priors
-
-Predictions are also adjusted by lightweight disease priors (common vs rare conditions) to better reflect real-world prevalence.
-
-## AI Model
-
-The core prediction engine is built with PyTorch.
-
-Model inputs:
-
-- 377 symptom features
-- symptom embeddings
-
-Model output:
-
-- ~400 diseases
-
-Architecture:
-
-Input Layer
-down
-Dense Layer (1024)
-down
-Dense Layer (512)
-down
-Dense Layer (256)
-down
-Output Layer (~400 diseases)
-
-Training techniques:
-
-- class balancing
-- feature embeddings
-- batch normalization
-- dropout
-- train/test split
-
-## Model Performance
-
-- Top-1 Accuracy: ~84-85%
-- Top-5 Accuracy: ~97%
-
-Considering ~400 disease classes, this is strong performance.
-
-## Tech Stack
-
-Frontend:
-
-- React
-- TailwindCSS
-
-Backend:
-
-- Python
-- FastAPI
-
-AI / ML:
-
-- PyTorch
-- NumPy
-- Pandas
-- Scikit-learn
-
-Database:
-
-- SQLite
-
-Authentication:
-
-- JWT (Bearer Tokens)
-- RBAC
+- AI symptom analysis with probabilistic outputs
+- Dynamic follow-up questions that reduce long questionnaires
+- Symptom relationship modeling via embeddings and graphs
+- Explainable predictions with contributing symptoms
+- Risk-factor weighting and disease priors for realistic context
 
 ## System Architecture
 
@@ -176,9 +57,7 @@ SQLite Database
 ```
 project-root
 |-- frontend
-|   `-- react-app
 |-- backend
-|   `-- fastapi-server
 |-- ai-model
 |   |-- train.py
 |   |-- model.py
@@ -188,59 +67,126 @@ project-root
 |   |-- disease_model.pt
 |   |-- symptom_index.json
 |   `-- disease_labels.json
+|-- datasets
+|-- docs
+|-- image
 |-- README.md
-`-- architecture.md
 ```
 
-## Dataset Setup
+## Model Details
 
-The dataset and generated numpy arrays are not tracked in git. Place the CSV under
-`datasets/raw/` and run the cache builder to generate `X.npy`, `y.npy`, and
-`symptom_names.npy` locally:
+Model inputs:
+
+- 377 symptom features
+- symptom embeddings
+
+Model output:
+
+- ~400 diseases
+
+Training techniques:
+
+- class balancing
+- feature embeddings
+- batch normalization
+- dropout
+- train/test split
+
+Reported performance:
+
+- Top-1 Accuracy: ~84-85%
+- Top-5 Accuracy: ~97%
+
+## Quick Start
+
+### Backend
+
+```bash
+cd backend
+python -m venv .venv
+. .venv/Scripts/activate
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Dataset Cache (optional)
 
 ```bash
 python -c "from dataset_cache import load_cached_dataset; load_cached_dataset()"
 ```
 
-## Security Features
+## Security
 
-- JWT Authentication
+- JWT authentication
 - Role-Based Access Control (RBAC)
 - Secure API endpoints
-- User / Admin dashboards
+- User and Admin dashboards
 
-## User Roles
+## Screenshots
 
-User:
+All images are sourced from the root image/ folder.
 
-- symptom input
-- view predictions
-- view history
+![Dashboard overview](image/Screenshot%202026-03-15%20155315.png)
+![Clinical assessment](image/Screenshot%202026-03-15%20155401.png)
+![Follow-up question](image/Screenshot%202026-03-15%20155417.png)
+![Risk results](image/Screenshot%202026-03-15%20155452.png)
+![Symptom details](image/Screenshot%202026-03-15%20155510.png)
+![Patient portal](image/Screenshot%202026-03-15%20155553.png)
+![Admin analytics](image/Screenshot%202026-03-15%20155617.png)
+![Model explanation](image/Screenshot%202026-03-15%20155636.png)
+![Diagnosis history](image/Screenshot%202026-03-15%20155655.png)
+![Security and roles](image/Screenshot%202026-03-15%20155712.png)
+![Deployment view](image/Screenshot%202026-03-15%20155726.png)
 
-Admin:
+## Visual Insights
 
-- dashboard analytics
-- system monitoring
-- dataset updates
+### Model Accuracy Snapshot
 
-## Target Users
+```text
+Top-1 Accuracy  | ###########################  85%
+Top-5 Accuracy  | #####################################  97%
+```
 
-General public who want:
+### Symptom Flow (Mermaid)
 
-- early symptom insights
-- risk awareness
-- health guidance
+```mermaid
+flowchart LR
+  A[User Symptoms] --> B[AI Follow-up Questions]
+  B --> C[Risk Factor Weighting]
+  C --> D[Prediction + Probabilities]
+  D --> E[Explainable Insights]
+```
 
-## Disclaimer
+### Probability Distribution (Mermaid)
 
-This system is intended for educational and early awareness purposes only.
+```mermaid
+pie
+  title Sample Risk Distribution
+  "Flu" : 64
+  "Pneumonia" : 18
+  "Common Cold" : 10
+  "Bronchitis" : 6
+  "COVID-like" : 2
+```
 
-It does not replace professional medical diagnosis.
+## Contributors
 
-Users should consult qualified healthcare professionals for medical advice.
+Team CTRL-C & CTRL-V
 
-## Team
+- Hitesh Kumar Roy (Team Leader)
+- Tamoghno Das
+- Debadrita Chowdhury
 
-Built by CTRC-C & CTRL-V
+## License & Copyright
 
-Built with care using AI and healthcare innovation.
+Copyright (c) 2026 CTRL-C & CTRL-V. All rights reserved.
+
+This project is intended for educational and early awareness purposes only. It does not replace professional medical advice.
