@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 02:14pm (Added by Hitesh)
+
+### Changed
+
+- Refreshed the frontend visual system with a clinical palette, new typography, and redesigned landing and portal layouts.
+
 ## 2026-03-15 02:05pm (Added by Hitesh)
 
 ### Changed

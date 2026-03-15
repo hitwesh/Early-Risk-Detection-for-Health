@@ -210,11 +210,9 @@ const Diagnosis = () => {
   return (
     <section className="fade-in space-y-8">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
-          Patient Intake
-        </p>
-        <h1 className="mt-2 text-2xl font-semibold text-slate-900">
-          Diagnosis
+        <p className="eyebrow">Patient intake</p>
+        <h1 className="mt-2 font-display text-3xl text-slate-900">
+          Clinical assessment
         </h1>
         <p className="mt-2 text-sm text-slate-500">
           Provide patient health parameters to begin AI diagnosis.
@@ -222,12 +220,12 @@ const Diagnosis = () => {
       </div>
 
       <form
-        className="mx-auto max-w-4xl space-y-4 rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl"
+        className="card mx-auto max-w-4xl space-y-4 p-8"
         onSubmit={handleSubmit}
       >
-        <div className="border-t border-rose-100 pt-6">
+        <div className="border-t border-slate-200 pt-6">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="rounded-lg p-2 transition duration-150 hover:bg-rose-50/30">
+            <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
               <label
                 className="mb-1 block text-sm font-medium text-slate-700"
                 htmlFor="age"
@@ -238,13 +236,13 @@ const Diagnosis = () => {
                 id="age"
                 type="number"
                 min="0"
-                className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm transition duration-200 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition duration-200 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
                 value={formValues.age}
                 onChange={handleChange("age")}
               />
             </div>
 
-            <div className="rounded-lg p-2 transition duration-150 hover:bg-rose-50/30">
+            <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
               <label
                 className="mb-1 block text-sm font-medium text-slate-700"
                 htmlFor="sex"
@@ -262,7 +260,7 @@ const Diagnosis = () => {
               />
             </div>
 
-            <div className="rounded-lg p-2 transition duration-150 hover:bg-rose-50/30">
+            <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
               <label
                 className="mb-1 block text-sm font-medium text-slate-700"
                 htmlFor="bmi"
@@ -274,13 +272,13 @@ const Diagnosis = () => {
                 type="number"
                 min="0"
                 step="0.1"
-                className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm transition duration-200 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition duration-200 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
                 value={formValues.bmi}
                 onChange={handleChange("bmi")}
               />
             </div>
 
-            <div className="rounded-lg p-2 transition duration-150 hover:bg-rose-50/30">
+            <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
               <label
                 className="mb-1 block text-sm font-medium text-slate-700"
                 htmlFor="bloodPressure"
@@ -291,13 +289,13 @@ const Diagnosis = () => {
                 id="bloodPressure"
                 type="number"
                 min="0"
-                className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm transition duration-200 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition duration-200 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
                 value={formValues.bloodPressure}
                 onChange={handleChange("bloodPressure")}
               />
             </div>
 
-            <div className="rounded-lg p-2 transition duration-150 hover:bg-rose-50/30">
+            <div className="rounded-lg p-2 transition duration-150 hover:bg-slate-50">
               <label
                 className="mb-1 block text-sm font-medium text-slate-700"
                 htmlFor="bloodSugar"
@@ -308,7 +306,7 @@ const Diagnosis = () => {
                 id="bloodSugar"
                 type="number"
                 min="0"
-                className="w-full rounded-lg border border-rose-200 bg-rose-50/40 px-3 py-2 text-sm transition duration-200 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition duration-200 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
                 value={formValues.bloodSugar}
                 onChange={handleChange("bloodSugar")}
               />
@@ -326,7 +324,7 @@ const Diagnosis = () => {
               { key: "chronicDisease", label: "Chronic disease history" },
             ].map((field) => (
               <div
-                className="rounded-lg p-2 transition duration-150 hover:bg-rose-50/30"
+                className="rounded-lg p-2 transition duration-150 hover:bg-slate-50"
                 key={field.key}
               >
                 <label className="mb-1 block text-sm font-medium text-slate-700">
@@ -348,15 +346,11 @@ const Diagnosis = () => {
         {error && <p className="text-sm text-rose-600">{error}</p>}
 
         {isSubmitting && (
-          <p className="text-sm text-rose-600">Analyzing symptoms...</p>
+          <p className="text-sm text-slate-500">Analyzing symptoms...</p>
         )}
 
         <div className="flex justify-center pt-2">
-          <button
-            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-rose-500 to-rose-600 px-5 py-2 text-sm font-medium text-white transition duration-200 ease-in-out hover:scale-105 hover:from-rose-600 hover:to-rose-700 hover:shadow-lg active:scale-95"
-            type="submit"
-            disabled={isSubmitting}
-          >
+          <button className="btn-primary flex items-center gap-2" type="submit" disabled={isSubmitting}>
             <span>
               {isSubmitting ? "Analyzing symptoms..." : "Start AI Diagnosis"}
             </span>
@@ -365,10 +359,8 @@ const Diagnosis = () => {
         </div>
       </form>
 
-      <div className="rounded-xl border border-rose-200 bg-white/70 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
-        <h2 className="text-lg font-semibold text-slate-900">
-          AI Analysis Progress
-        </h2>
+      <div className="card p-6">
+        <h2 className="text-lg font-semibold text-slate-900">AI Analysis Progress</h2>
         <p className="mt-2 text-sm text-slate-600">
           Possible conditions remaining: {remainingCases ?? "--"}
         </p>
@@ -383,10 +375,8 @@ const Diagnosis = () => {
       </div>
 
       {followUpQuestion && (
-        <div className="fade-in rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
-          <h2 className="text-lg font-semibold text-slate-900">
-            Follow-up Question
-          </h2>
+        <div className="fade-in card p-6">
+          <h2 className="text-lg font-semibold text-slate-900">Follow-up Question</h2>
           <p className="mt-2 text-sm text-slate-600">{followUpQuestion}</p>
           <div className="mt-4 flex gap-3">
             {"Yes,No".split(",").map((label) => {
@@ -398,8 +388,8 @@ const Diagnosis = () => {
                   type="button"
                   className={`rounded-lg px-4 py-2 text-sm font-medium transition duration-200 ease-in-out hover:scale-105 hover:shadow-lg active:scale-95 ${
                     isActive
-                      ? "bg-rose-600 text-white"
-                      : "border border-rose-200 bg-white text-rose-900"
+                      ? "bg-teal-700 text-white"
+                      : "border border-slate-200 bg-white text-slate-700"
                   }`}
                   onClick={() => handleAnswer(value)}
                 >

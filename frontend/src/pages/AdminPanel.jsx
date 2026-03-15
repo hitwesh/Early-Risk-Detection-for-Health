@@ -163,10 +163,11 @@ const AdminPanel = () => {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100">
-      <div className="mx-auto max-w-6xl space-y-8 px-6 py-8">
+    <section className="space-y-8">
+      <div className="mx-auto max-w-6xl space-y-8">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <p className="eyebrow">Administration</p>
+          <h1 className="mt-2 font-display text-3xl text-slate-900">
             Admin Monitoring Dashboard
           </h1>
           <p className="mt-2 text-sm text-slate-600">
@@ -176,39 +177,29 @@ const AdminPanel = () => {
         </div>
 
         {error ? (
-          <div className="rounded-xl border border-rose-200 bg-white/70 p-6 text-sm text-rose-600 shadow-xl backdrop-blur-md">
-            {error}
-          </div>
+          <div className="card-muted p-6 text-sm text-rose-600">{error}</div>
         ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-            <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md">
-              <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
-                Total Users
-              </p>
+            <div className="card p-6">
+              <p className="eyebrow">Total users</p>
               <p className="mt-3 text-2xl font-semibold text-slate-900">
                 {isLoading ? "--" : stats?.total_users ?? 0}
               </p>
             </div>
-            <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md">
-              <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
-                Total Diagnoses
-              </p>
+            <div className="card p-6">
+              <p className="eyebrow">Total diagnoses</p>
               <p className="mt-3 text-2xl font-semibold text-slate-900">
                 {isLoading ? "--" : stats?.total_diagnoses ?? 0}
               </p>
             </div>
-            <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md">
-              <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
-                Active Users
-              </p>
+            <div className="card p-6">
+              <p className="eyebrow">Active users</p>
               <p className="mt-3 text-2xl font-semibold text-slate-900">
                 {isLoading ? "--" : stats?.users_with_diagnoses ?? 0}
               </p>
             </div>
-            <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md">
-              <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
-                Latest Diagnosis
-              </p>
+            <div className="card p-6">
+              <p className="eyebrow">Latest diagnosis</p>
               <p className="mt-3 text-sm text-slate-700">
                 {stats?.latest_diagnosis_at
                   ? new Date(stats.latest_diagnosis_at).toLocaleString()
@@ -219,7 +210,7 @@ const AdminPanel = () => {
         )}
 
         <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md md:col-span-1">
+          <div className="card p-6 md:col-span-1">
             <h2 className="text-lg font-semibold text-slate-900">Users</h2>
             {users.length > 0 ? (
               <div className="mt-4 max-h-[520px] space-y-3 overflow-y-auto pr-2">
@@ -231,13 +222,13 @@ const AdminPanel = () => {
                       setSelectedUserId(user.id);
                       setSelectedEntryId(user.history?.[0]?.id ?? null);
                     }}
-                    className={`w-full rounded-xl border bg-white/60 p-4 text-left text-sm shadow-md backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl ${
+                    className={`w-full rounded-xl border bg-white p-4 text-left text-sm shadow-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl ${
                       user.id === selectedUserId
-                        ? "border-rose-300 ring-2 ring-rose-200"
-                        : "border-white/30"
+                        ? "border-teal-300 ring-2 ring-teal-100"
+                        : "border-slate-200"
                     }`}
                   >
-                    <p className="text-xs uppercase tracking-widest text-rose-500">
+                    <p className="text-xs uppercase tracking-widest text-teal-600">
                       {user.role}
                     </p>
                     <p className="mt-2 font-medium text-slate-900">
@@ -257,10 +248,8 @@ const AdminPanel = () => {
           </div>
 
           <div className="space-y-6 md:col-span-2">
-            <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md">
-              <h2 className="text-lg font-semibold text-slate-900">
-                User Details
-              </h2>
+            <div className="card p-6">
+              <h2 className="text-lg font-semibold text-slate-900">User Details</h2>
               {selectedUser ? (
                 <div className="mt-3 space-y-3 text-sm text-slate-700">
                   <p>
@@ -282,7 +271,7 @@ const AdminPanel = () => {
                   <div>
                     <button
                       type="button"
-                      className="rounded-lg border border-rose-200 bg-white px-4 py-2 text-sm font-medium text-rose-700 transition duration-200 hover:border-rose-300 hover:bg-rose-50"
+                      className="btn-secondary"
                       onClick={() => handleDeleteUser(selectedUser)}
                       disabled={isDeleting}
                     >
@@ -292,7 +281,7 @@ const AdminPanel = () => {
                   <div className="flex flex-wrap gap-3">
                     <button
                       type="button"
-                      className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium text-rose-700 transition duration-200 hover:border-rose-300 hover:bg-rose-100"
+                      className="btn-secondary"
                       onClick={handleDownloadSelected}
                       disabled={isDownloading}
                     >
@@ -302,7 +291,7 @@ const AdminPanel = () => {
                     </button>
                     <button
                       type="button"
-                      className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition duration-200 hover:border-slate-300 hover:bg-slate-50"
+                      className="btn-secondary"
                       onClick={handleDownloadAll}
                       disabled={isDownloading}
                     >
@@ -322,7 +311,7 @@ const AdminPanel = () => {
               )}
             </div>
 
-            <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md">
+            <div className="card p-6">
               <h2 className="text-lg font-semibold text-slate-900">
                 User Diagnosis History
               </h2>
@@ -333,13 +322,13 @@ const AdminPanel = () => {
                       key={entry.id}
                       type="button"
                       onClick={() => setSelectedEntryId(entry.id)}
-                      className={`w-full rounded-xl border bg-white/60 p-4 text-left text-sm shadow-md backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl ${
+                      className={`w-full rounded-xl border bg-white p-4 text-left text-sm shadow-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl ${
                         entry.id === selectedEntryId
-                          ? "border-rose-300 ring-2 ring-rose-200"
-                          : "border-white/30"
+                          ? "border-teal-300 ring-2 ring-teal-100"
+                          : "border-slate-200"
                       }`}
                     >
-                      <p className="text-xs uppercase tracking-widest text-rose-500">
+                      <p className="text-xs uppercase tracking-widest text-teal-600">
                         {new Date(entry.created_at).toLocaleString()}
                       </p>
                       <p className="mt-1 text-slate-700">
@@ -355,13 +344,13 @@ const AdminPanel = () => {
               )}
             </div>
 
-            <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md">
+            <div className="card p-6">
               <h2 className="text-lg font-semibold text-slate-900">
                 Selected Diagnosis Details
               </h2>
               {selectedEntry ? (
                 <div className="mt-3 space-y-3 text-sm text-slate-700">
-                  <p className="text-xs uppercase tracking-widest text-rose-500">
+                  <p className="text-xs uppercase tracking-widest text-teal-600">
                     {new Date(selectedEntry.created_at).toLocaleString()}
                   </p>
                   <p>
@@ -382,12 +371,12 @@ const AdminPanel = () => {
               )}
             </div>
 
-            <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md">
+            <div className="card p-6">
               <h2 className="text-lg font-semibold text-slate-900">
                 Prediction Confidence Chart
               </h2>
               {predictions.length > 0 ? (
-                <div className="mt-4 h-64 rounded-lg border border-rose-100 bg-rose-50/40 p-4">
+                <div className="mt-4 h-64 rounded-lg border border-slate-200 bg-white p-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={predictions} margin={{ left: 0, right: 16 }}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -399,7 +388,7 @@ const AdminPanel = () => {
                       <Tooltip
                         formatter={(value) => [`${value}%`, "Probability"]}
                       />
-                      <Bar dataKey="probability" fill="#e11d48" />
+                      <Bar dataKey="probability" fill="#0f766e" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>

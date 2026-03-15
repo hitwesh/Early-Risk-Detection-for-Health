@@ -3,8 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { getCurrentUser, getToken, logoutUser } from "../services/auth.js";
 
 const Navbar = () => {
-  const baseClass =
-    "rounded-full px-3 py-1 text-sm font-medium text-rose-900 transition duration-200 hover:bg-rose-100 hover:text-rose-600";
+  const baseClass = "nav-link";
   const navigate = useNavigate();
   const isAuthenticated = Boolean(getToken());
   const userEmail = localStorage.getItem("userEmail");
@@ -36,36 +35,42 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  const navLinkClass = ({ isActive }) =>
+    `${baseClass}${isActive ? " active" : ""}`;
+
   return (
-    <nav className="border-b border-white/30 bg-white/60 px-6 py-4 backdrop-blur-md">
+    <nav className="nav-shell px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="mr-6 text-lg font-semibold text-rose-900">
-            SymptoScan
+          <span className="mr-6 flex items-center gap-2 text-lg font-semibold text-slate-900">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-900 text-white">
+              S
+            </span>
+            <span className="font-display">SymptoScan</span>
           </span>
-          <NavLink className={baseClass} to="/">
+          <NavLink className={navLinkClass} to="/">
             Home
           </NavLink>
-          <NavLink className={baseClass} to="/diagnosis">
+          <NavLink className={navLinkClass} to="/diagnosis">
             Diagnosis
           </NavLink>
-          <NavLink className={baseClass} to="/user">
-            User Panel
+          <NavLink className={navLinkClass} to="/user">
+            Patient Portal
           </NavLink>
           {isAuthenticated && userRole === "admin" && (
-            <NavLink className={baseClass} to="/admin">
+            <NavLink className={navLinkClass} to="/admin">
               Admin
             </NavLink>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {isAuthenticated ? (
             <>
-              <span className="text-sm font-medium text-rose-900">
+              <span className="text-sm font-semibold text-slate-700">
                 {userEmail ?? "Account"}
               </span>
               <button
-                className="rounded-full px-3 py-1 text-sm font-medium text-rose-900 transition duration-200 hover:bg-rose-100 hover:text-rose-600"
+                className="btn-secondary"
                 type="button"
                 onClick={handleLogout}
               >
@@ -74,10 +79,10 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <NavLink className={baseClass} to="/login">
+              <NavLink className={navLinkClass} to="/login">
                 Login
               </NavLink>
-              <NavLink className={baseClass} to="/register">
+              <NavLink className={navLinkClass} to="/register">
                 Register
               </NavLink>
             </>

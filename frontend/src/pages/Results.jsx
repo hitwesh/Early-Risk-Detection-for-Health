@@ -132,24 +132,22 @@ const Results = () => {
   return (
     <section className="space-y-6">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
-          AI Report
-        </p>
-        <h1 className="mt-2 text-2xl font-semibold text-slate-900">Results</h1>
+        <p className="eyebrow">AI report</p>
+        <h1 className="mt-2 font-display text-3xl text-slate-900">Results</h1>
       </div>
       {symptoms.length > 0 && (
-        <div className="rounded-xl bg-white p-4 text-sm text-slate-600 shadow-md">
+        <div className="card-muted p-4 text-sm text-slate-600">
           Submitted symptoms: {symptoms.join(", ")}
         </div>
       )}
       {response ? (
         <div className="space-y-6">
           {getToken() ? (
-            <section className="flex flex-wrap items-center gap-3 rounded-xl bg-white p-4 text-sm text-slate-600 shadow-md">
+            <section className="card-muted flex flex-wrap items-center gap-3 p-4 text-sm text-slate-600">
               <button
                 type="button"
                 onClick={handleDownloadSingle}
-                className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium text-rose-700 transition duration-200 hover:border-rose-300 hover:bg-rose-100"
+                className="btn-secondary"
                 disabled={isDownloading}
               >
                 {isDownloading ? "Preparing..." : "Download Report PDF"}
@@ -159,14 +157,14 @@ const Results = () => {
               ) : null}
             </section>
           ) : null}
-          <section className="space-y-3 rounded-xl bg-white p-6 shadow-md">
+          <section className="card space-y-3 p-6">
             <h2 className="text-lg font-semibold">Top Predictions</h2>
             {predictions.length > 0 ? (
               <ul className="space-y-2">
                 {predictions.map((item) => (
                   <li
                     key={item.disease}
-                    className="flex items-center justify-between rounded-lg border border-rose-100 bg-rose-50/40 px-4 py-2 text-sm"
+                    className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm"
                   >
                     <span className="font-medium text-slate-900">
                       {item.disease}
@@ -184,12 +182,10 @@ const Results = () => {
             )}
           </section>
 
-          <section className="space-y-3 rounded-xl bg-white p-6 shadow-md">
-            <h2 className="text-lg font-semibold">
-              Prediction Confidence Chart
-            </h2>
+          <section className="card space-y-3 p-6">
+            <h2 className="text-lg font-semibold">Prediction Confidence Chart</h2>
             {predictions.length > 0 ? (
-              <div className="h-64 rounded-lg border border-rose-100 bg-rose-50/40 p-4">
+              <div className="h-64 rounded-lg border border-slate-200 bg-white p-4">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={predictions} margin={{ left: 0, right: 16 }}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -201,7 +197,7 @@ const Results = () => {
                     <Tooltip
                       formatter={(value) => [`${value}%`, "Probability"]}
                     />
-                    <Bar dataKey="probability" fill="#e11d48" />
+                    <Bar dataKey="probability" fill="#0f766e" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -212,14 +208,14 @@ const Results = () => {
             )}
           </section>
 
-          <section className="space-y-3 rounded-xl bg-white p-6 shadow-md">
+          <section className="card space-y-3 p-6">
             <h2 className="text-lg font-semibold">Explainable AI</h2>
             {explainableSymptoms.length > 0 ? (
               <div className="flex flex-wrap gap-2">
                 {explainableSymptoms.map((symptom, index) => (
                   <span
                     key={`${symptom}-${index}`}
-                    className="rounded-full bg-rose-50 px-3 py-1 text-sm text-rose-900"
+                    className="rounded-full bg-teal-50 px-3 py-1 text-sm text-teal-800"
                   >
                     {symptom}
                   </span>
@@ -233,7 +229,7 @@ const Results = () => {
           </section>
         </div>
       ) : (
-        <div className="rounded-xl bg-white p-4 text-sm text-slate-600 shadow-md">
+        <div className="card-muted p-4 text-sm text-slate-600">
           No diagnosis data yet. Submit symptoms to see results.
         </div>
       )}

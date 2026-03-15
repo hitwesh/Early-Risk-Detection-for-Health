@@ -120,10 +120,11 @@ const UserPanel = () => {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100">
-      <div className="mx-auto max-w-6xl space-y-8 px-6 py-8">
+    <section className="space-y-8">
+      <div className="mx-auto max-w-6xl space-y-8">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <p className="eyebrow">Patient portal</p>
+          <h1 className="mt-2 font-display text-3xl text-slate-900">
             User Health Dashboard
           </h1>
           <p className="mt-2 text-sm text-slate-600">
@@ -133,28 +134,22 @@ const UserPanel = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
-            <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
-              Total Diagnoses
-            </p>
+          <div className="card p-6">
+            <p className="eyebrow">Total diagnoses</p>
             <p className="mt-3 text-2xl font-semibold text-slate-900">
               {isLoading ? "--" : totalDiagnoses}
             </p>
           </div>
-          <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
-            <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
-              Last Diagnosis Date
-            </p>
+          <div className="card p-6">
+            <p className="eyebrow">Last diagnosis date</p>
             <p className="mt-3 text-sm text-slate-700">
               {latestEntry
                 ? new Date(latestEntry.created_at).toLocaleString()
                 : "No records yet"}
             </p>
           </div>
-          <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
-            <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
-              Top Predicted Condition
-            </p>
+          <div className="card p-6">
+            <p className="eyebrow">Top predicted condition</p>
             <p className="mt-3 text-sm text-slate-700">
               {latestEntry?.top_prediction ?? "No predictions"}
             </p>
@@ -162,10 +157,8 @@ const UserPanel = () => {
         </div>
 
         <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
-            <h2 className="text-lg font-semibold text-slate-900">
-              Recent Diagnoses
-            </h2>
+          <div className="card p-6">
+            <h2 className="text-lg font-semibold text-slate-900">Recent Diagnoses</h2>
             {error ? (
               <p className="mt-3 text-sm text-rose-600">{error}</p>
             ) : history.length > 0 ? (
@@ -175,15 +168,15 @@ const UserPanel = () => {
                   return (
                     <button
                       key={`${entry.created_at}-${index}`}
-                      className={`w-full rounded-xl border bg-white/60 p-4 text-left text-sm shadow-md backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl ${
+                      className={`w-full rounded-xl border bg-white p-4 text-left text-sm shadow-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl ${
                         isActive
-                          ? "border-rose-300 ring-2 ring-rose-200"
-                          : "border-white/30"
+                          ? "border-teal-300 ring-2 ring-teal-100"
+                          : "border-slate-200"
                       }`}
                       type="button"
                       onClick={() => setSelectedId(entry.id)}
                     >
-                      <p className="text-xs uppercase tracking-widest text-rose-500">
+                      <p className="text-xs uppercase tracking-widest text-teal-600">
                         {new Date(entry.created_at).toLocaleString()}
                       </p>
                       <p className="mt-2 text-slate-700">
@@ -204,13 +197,11 @@ const UserPanel = () => {
           </div>
 
           <div className="space-y-6">
-            <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
-              <h2 className="text-lg font-semibold text-slate-900">
-                Selected Diagnosis
-              </h2>
+            <div className="card p-6">
+              <h2 className="text-lg font-semibold text-slate-900">Selected Diagnosis</h2>
               {selectedEntry ? (
                 <div className="mt-3 space-y-3 text-sm text-slate-700">
-                  <p className="text-xs uppercase tracking-widest text-rose-500">
+                  <p className="text-xs uppercase tracking-widest text-teal-600">
                     {new Date(selectedEntry.created_at).toLocaleString()}
                   </p>
                   <p>
@@ -235,7 +226,7 @@ const UserPanel = () => {
                     <button
                       type="button"
                       onClick={handleDownloadSelected}
-                      className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium text-rose-700 transition duration-200 hover:border-rose-300 hover:bg-rose-100"
+                      className="btn-secondary"
                       disabled={isDownloading}
                     >
                       {isDownloading
@@ -245,7 +236,7 @@ const UserPanel = () => {
                     <button
                       type="button"
                       onClick={handleDownloadAll}
-                      className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition duration-200 hover:border-slate-300 hover:bg-slate-50"
+                      className="btn-secondary"
                       disabled={isDownloading}
                     >
                       Download Full History
@@ -264,12 +255,12 @@ const UserPanel = () => {
               )}
             </div>
 
-            <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
+            <div className="card p-6">
               <h2 className="text-lg font-semibold text-slate-900">
                 Prediction Confidence Chart
               </h2>
               {predictions.length > 0 ? (
-                <div className="mt-4 h-64 rounded-lg border border-rose-100 bg-rose-50/40 p-4">
+                <div className="mt-4 h-64 rounded-lg border border-slate-200 bg-white p-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={predictions} margin={{ left: 0, right: 16 }}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -281,7 +272,7 @@ const UserPanel = () => {
                       <Tooltip
                         formatter={(value) => [`${value}%`, "Probability"]}
                       />
-                      <Bar dataKey="probability" fill="#e11d48" />
+                      <Bar dataKey="probability" fill="#0f766e" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>

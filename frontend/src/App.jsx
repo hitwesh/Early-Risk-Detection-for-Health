@@ -10,9 +10,9 @@ import Register from "./pages/Register.jsx";
 
 const App = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100 text-slate-900">
+    <div className="app-shell text-slate-900">
       <Navbar />
-      <main className="mx-auto w-full max-w-6xl px-6 py-8">
+      <main className="page-wrapper">
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
