@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getToken, getUserHistory, logoutUser } from "../services/auth.js";
+import {
+  downloadUserHistoryReport,
+  downloadUserReport,
+  getToken,
+  getUserHistory,
+  logoutUser,
+} from "../services/auth.js";
 import {
   Bar,
   BarChart,
@@ -25,6 +31,8 @@ const coercePercent = (value) => {
 const UserPanel = () => {
   const [history, setHistory] = useState([]);
   const [error, setError] = useState("");
+  const [downloadError, setDownloadError] = useState("");
+  const [isDownloading, setIsDownloading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const navigate = useNavigate();
@@ -82,6 +90,34 @@ const UserPanel = () => {
 
   const latestEntry = history[0];
   const totalDiagnoses = history.length;
+
+  const handleDownloadSelected = async () => {
+    if (!selectedEntry) {
+      setDownloadError("Select a diagnosis entry to download.");
+      return;
+    }
+    setDownloadError("");
+    setIsDownloading(true);
+    try {
+      await downloadUserReport(selectedEntry.id);
+    } catch (err) {
+      setDownloadError("Unable to download the report.");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const handleDownloadAll = async () => {
+    setDownloadError("");
+    setIsDownloading(true);
+    try {
+      await downloadUserHistoryReport();
+    } catch (err) {
+      setDownloadError("Unable to download the history report.");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100">
@@ -195,6 +231,31 @@ const UserPanel = () => {
                       {selectedEntry.risk_factors.join(", ")}
                     </p>
                   ) : null}
+                  <div className="flex flex-wrap gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={handleDownloadSelected}
+                      className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium text-rose-700 transition duration-200 hover:border-rose-300 hover:bg-rose-100"
+                      disabled={isDownloading}
+                    >
+                      {isDownloading
+                        ? "Preparing..."
+                        : "Download Selected Report"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleDownloadAll}
+                      className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition duration-200 hover:border-slate-300 hover:bg-slate-50"
+                      disabled={isDownloading}
+                    >
+                      Download Full History
+                    </button>
+                    {downloadError ? (
+                      <span className="text-sm text-rose-600">
+                        {downloadError}
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
               ) : (
                 <p className="mt-3 text-sm text-slate-600">

@@ -9,7 +9,13 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { deleteAdminUser, getAdminStats, getAdminUsers } from "../services/auth.js";
+import {
+  deleteAdminUser,
+  downloadAdminUserHistoryReport,
+  downloadAdminUserReport,
+  getAdminStats,
+  getAdminUsers,
+} from "../services/auth.js";
 
 const coercePercent = (value) => {
   const numeric = Number(value);
@@ -30,6 +36,8 @@ const AdminPanel = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -93,7 +101,7 @@ const AdminPanel = () => {
       return;
     }
     const confirmed = window.confirm(
-      `Delete ${user.email} and all diagnosis history? This cannot be undone.`,
+      `Disable ${user.email}? The account will be soft deleted.`,
     );
     if (!confirmed) {
       return;
@@ -115,6 +123,42 @@ const AdminPanel = () => {
       setError("Unable to delete user.");
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handleDownloadSelected = async () => {
+    if (!selectedUser || !selectedEntry) {
+      setDownloadError("Select a user and history entry first.");
+      return;
+    }
+    setIsDownloading(true);
+    setDownloadError("");
+    try {
+      await downloadAdminUserReport(selectedUser.id, selectedEntry.id);
+    } catch (err) {
+      setDownloadError("Unable to download the report.");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const handleDownloadAll = async () => {
+    if (!selectedUser) {
+      setDownloadError("Select a user first.");
+      return;
+    }
+    if (!selectedHistory.length) {
+      setDownloadError("No history available for this user.");
+      return;
+    }
+    setIsDownloading(true);
+    setDownloadError("");
+    try {
+      await downloadAdminUserHistoryReport(selectedUser.id);
+    } catch (err) {
+      setDownloadError("Unable to download the user history.");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -244,6 +288,31 @@ const AdminPanel = () => {
                     >
                       {isDeleting ? "Deleting..." : "Delete User"}
                     </button>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <button
+                      type="button"
+                      className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium text-rose-700 transition duration-200 hover:border-rose-300 hover:bg-rose-100"
+                      onClick={handleDownloadSelected}
+                      disabled={isDownloading}
+                    >
+                      {isDownloading
+                        ? "Preparing..."
+                        : "Download Selected Report"}
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition duration-200 hover:border-slate-300 hover:bg-slate-50"
+                      onClick={handleDownloadAll}
+                      disabled={isDownloading}
+                    >
+                      Download Full History
+                    </button>
+                    {downloadError ? (
+                      <span className="text-sm text-rose-600">
+                        {downloadError}
+                      </span>
+                    ) : null}
                   </div>
                 </div>
               ) : (

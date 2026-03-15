@@ -56,6 +56,8 @@ def get_current_user(
 	user = db.query(User).filter(User.id == user_id).first()
 	if user is None:
 		raise HTTPException(status_code=401, detail="User not found")
+	if not user.is_active:
+		raise HTTPException(status_code=401, detail="User not found")
 
 	return user
 
@@ -78,6 +80,8 @@ def get_optional_user(
 
 	user = db.query(User).filter(User.id == user_id).first()
 	if user is None:
+		return None
+	if not user.is_active:
 		return None
 
 	return user

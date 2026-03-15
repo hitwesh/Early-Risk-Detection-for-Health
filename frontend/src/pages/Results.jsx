@@ -8,6 +8,10 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import {
+  downloadUserReport,
+  getToken,
+} from "../services/auth.js";
 
 const coercePercent = (value) => {
   const numeric = Number(value);
@@ -82,6 +86,9 @@ const extractExplainableSymptoms = (raw) => {
 const Results = () => {
   const [response, setResponse] = useState(null);
   const [symptoms, setSymptoms] = useState([]);
+  const [historyId, setHistoryId] = useState(null);
+  const [downloadError, setDownloadError] = useState("");
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const predictions = useMemo(() => normalizePredictions(response), [response]);
   const explainableSymptoms = useMemo(
@@ -92,6 +99,7 @@ const Results = () => {
   useEffect(() => {
     const storedResponse = sessionStorage.getItem("diagnosisResponse");
     const storedSymptoms = sessionStorage.getItem("diagnosisSymptoms");
+    const storedHistoryId = sessionStorage.getItem("diagnosisHistoryId");
 
     if (storedResponse) {
       setResponse(JSON.parse(storedResponse));
@@ -99,7 +107,27 @@ const Results = () => {
     if (storedSymptoms) {
       setSymptoms(JSON.parse(storedSymptoms));
     }
+    if (storedHistoryId) {
+      setHistoryId(Number(storedHistoryId));
+    }
   }, []);
+
+  const handleDownloadSingle = async () => {
+    if (!historyId) {
+      setDownloadError("Save a diagnosis before downloading a report.");
+      return;
+    }
+    setIsDownloading(true);
+    setDownloadError("");
+    try {
+      await downloadUserReport(historyId);
+    } catch (err) {
+      setDownloadError("Unable to download the report.");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
 
   return (
     <section className="space-y-6">
@@ -116,6 +144,21 @@ const Results = () => {
       )}
       {response ? (
         <div className="space-y-6">
+          {getToken() ? (
+            <section className="flex flex-wrap items-center gap-3 rounded-xl bg-white p-4 text-sm text-slate-600 shadow-md">
+              <button
+                type="button"
+                onClick={handleDownloadSingle}
+                className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium text-rose-700 transition duration-200 hover:border-rose-300 hover:bg-rose-100"
+                disabled={isDownloading}
+              >
+                {isDownloading ? "Preparing..." : "Download Report PDF"}
+              </button>
+              {downloadError ? (
+                <span className="text-sm text-rose-600">{downloadError}</span>
+              ) : null}
+            </section>
+          ) : null}
           <section className="space-y-3 rounded-xl bg-white p-6 shadow-md">
             <h2 className="text-lg font-semibold">Top Predictions</h2>
             {predictions.length > 0 ? (

@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.ai.diagnosis_engine import normalize_symptom, predict_from_vector, run_diagnosis
 from app.ai.model_loader import get_model
-from app.core.security import get_optional_user
+from app.core.security import get_current_user, get_optional_user
 from app.db.deps import get_db
 from app.models.user import User
 from app.schemas.diagnosis_schema import (
@@ -16,7 +16,11 @@ from app.schemas.diagnosis_schema import (
 	DiagnosisResponse,
 	DiagnosisStartRequest,
 )
-from app.services.diagnosis_service import create_history_for_user
+from app.services.diagnosis_service import (
+	create_history_for_user,
+	get_history_entry_for_user,
+	get_history_for_user,
+)
 from app.services.diagnosis_session import (
 	CONFIDENCE_STOP,
 	MAX_QUESTIONS,
@@ -27,7 +31,11 @@ from app.services.diagnosis_session import (
 	is_session_finished,
 	update_symptom,
 )
-from app.services.report_service import generate_diagnosis_report
+from app.services.report_service import (
+	generate_diagnosis_report,
+	generate_history_bundle_report,
+	generate_history_report,
+)
 
 router = APIRouter(prefix="/diagnosis", tags=["Diagnosis"])
 
@@ -46,7 +54,8 @@ def predict_disease(
 		risk_factors=data.dict(),
 	)
 	if current_user is not None:
-		create_history_for_user(db, current_user.id, normalized_symptoms, result)
+		record = create_history_for_user(db, current_user.id, normalized_symptoms, result)
+		result["history_id"] = record.id
 
 	return result
 
@@ -113,13 +122,15 @@ def answer_question(
 	prediction = predict_from_vector(session["vector"], session["risk_factors"])
 	max_probability = max(prediction["probabilities"]) if prediction["probabilities"] else 0.0
 	if is_session_finished(session, len(artifacts.symptom_names), max_probability=max_probability):
+		history_id = None
 		if current_user is not None:
-			create_history_for_user(
+			record = create_history_for_user(
 				db,
 				current_user.id,
 				session["positive_symptoms"],
 				prediction,
 			)
+			history_id = record.id
 		return {
 			"finished": True,
 			"step": session["questions_asked"],
@@ -128,17 +139,20 @@ def answer_question(
 			"predictions": prediction,
 			"positive_symptoms": session["positive_symptoms"],
 			"elapsed_seconds": time.time() - session["started_at"],
+			"history_id": history_id,
 		}
 
 	idx, symptom, engine = get_next_symptom(session, artifacts.symptom_names)
 	if symptom is None:
+		history_id = None
 		if current_user is not None:
-			create_history_for_user(
+			record = create_history_for_user(
 				db,
 				current_user.id,
 				session["positive_symptoms"],
 				prediction,
 			)
+			history_id = record.id
 		return {
 			"finished": True,
 			"step": session["questions_asked"],
@@ -147,6 +161,7 @@ def answer_question(
 			"predictions": prediction,
 			"positive_symptoms": session["positive_symptoms"],
 			"elapsed_seconds": time.time() - session["started_at"],
+			"history_id": history_id,
 		}
 
 	question = f"Do you have {symptom.replace('_', ' ')}?"
@@ -187,4 +202,42 @@ def generate_report(result: dict):
 		headers={
 			"Content-Disposition": "attachment; filename=diagnosis_report.pdf",
 		},
+	)
+
+
+@router.get("/report/history/{history_id}")
+def generate_history_report_for_user(
+	history_id: int,
+	current_user: User = Depends(get_current_user),
+	db: Session = Depends(get_db),
+):
+	history = get_history_entry_for_user(db, current_user.id, history_id)
+	if history is None:
+		raise HTTPException(status_code=404, detail="History record not found")
+
+	user_label = f"{current_user.email} (ID {current_user.id})"
+	pdf = generate_history_report(history, user_label=user_label)
+	filename = f"diagnosis_report_{history_id}.pdf"
+	return StreamingResponse(
+		pdf,
+		media_type="application/pdf",
+		headers={"Content-Disposition": f"attachment; filename={filename}"},
+	)
+
+
+@router.get("/report/all")
+def generate_all_history_report_for_user(
+	current_user: User = Depends(get_current_user),
+	db: Session = Depends(get_db),
+):
+	histories = get_history_for_user(db, current_user.id)
+	if not histories:
+		raise HTTPException(status_code=404, detail="No history available")
+
+	user_label = f"{current_user.email} (ID {current_user.id})"
+	pdf = generate_history_bundle_report(histories, user_label=user_label)
+	return StreamingResponse(
+		pdf,
+		media_type="application/pdf",
+		headers={"Content-Disposition": "attachment; filename=diagnosis_history.pdf"},
 	)

@@ -43,3 +43,14 @@ def delete_history_by_user(db: Session, user_id: int):
 		.filter(DiagnosisHistory.user_id == user_id)
 		.delete(synchronize_session=False)
 	)
+
+
+def get_history_by_user_and_id(db: Session, user_id: int, history_id: int):
+	return (
+		db.query(DiagnosisHistory)
+		.filter(
+			DiagnosisHistory.user_id == user_id,
+			DiagnosisHistory.id == history_id,
+		)
+		.first()
+	)

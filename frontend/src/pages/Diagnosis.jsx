@@ -63,7 +63,13 @@ const Diagnosis = () => {
     }
 
     const finalResult = data?.predictions ?? data;
+    const historyId = data?.history_id ?? data?.historyId ?? finalResult?.history_id;
     sessionStorage.setItem("diagnosisResponse", JSON.stringify(finalResult));
+    if (historyId) {
+      sessionStorage.setItem("diagnosisHistoryId", String(historyId));
+    } else {
+      sessionStorage.removeItem("diagnosisHistoryId");
+    }
     if (data?.positive_symptoms) {
       sessionStorage.setItem(
         "diagnosisSymptoms",

@@ -6,6 +6,14 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 02:00pm (Added by Hitesh)
+
+### Changed
+
+- Implemented soft-delete for users with inactive filtering in auth and admin stats.
+- Added report download endpoints for users/admins (single entry and full history) and enriched PDF output with symptoms, risk factors, and confidence chart.
+- Added frontend download actions for results, user history, and admin user history using stored diagnosis history IDs.
+
 ## 2026-03-15 01:37pm (Added by Hitesh)
 
 ### Changed

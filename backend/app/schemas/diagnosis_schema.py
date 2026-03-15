@@ -26,6 +26,7 @@ class DiagnosisResponse(BaseModel):
 	key_symptoms: Optional[list[str]] = None
 	risk_factors: Optional[list[str]] = None
 	elapsed_seconds: Optional[float] = None
+	history_id: Optional[int] = None
 
 
 class DiagnosisAnswerRequest(BaseModel):
@@ -64,6 +65,7 @@ class DiagnosisAnswerResponse(BaseModel):
 	predictions: Optional[DiagnosisResponse] = None
 	positive_symptoms: Optional[list[str]] = None
 	elapsed_seconds: Optional[float] = None
+	history_id: Optional[int] = None
 
 
 class DiagnosisHistoryOut(BaseModel):

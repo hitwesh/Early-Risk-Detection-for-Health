@@ -138,6 +138,58 @@ export const deleteAdminUser = async (userId) => {
   return response.json();
 };
 
+const extractFilename = (response, fallbackName) => {
+  const disposition = response.headers.get("Content-Disposition") || "";
+  const match = disposition.match(/filename=([^;]+)/i);
+  if (match && match[1]) {
+    return match[1].replace(/"/g, "");
+  }
+  return fallbackName;
+};
+
+const downloadPdf = async (url, fallbackName) => {
+  const response = await fetch(buildApiUrl(url), {
+    headers: {
+      ...buildAuthHeaders(),
+    },
+  });
+
+  if (!response.ok) {
+    const error = new Error("Unable to download report.");
+    error.status = response.status;
+    throw error;
+  }
+
+  const blob = await response.blob();
+  const fileName = extractFilename(response, fallbackName);
+  const objectUrl = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = objectUrl;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(objectUrl);
+};
+
+export const downloadUserReport = async (historyId) =>
+  downloadPdf(`/diagnosis/report/history/${historyId}`, "diagnosis_report.pdf");
+
+export const downloadUserHistoryReport = async () =>
+  downloadPdf(`/diagnosis/report/all`, "diagnosis_history.pdf");
+
+export const downloadAdminUserReport = async (userId, historyId) =>
+  downloadPdf(
+    `/admin/users/${userId}/report/${historyId}`,
+    "user_report.pdf",
+  );
+
+export const downloadAdminUserHistoryReport = async (userId) =>
+  downloadPdf(
+    `/admin/users/${userId}/report/all`,
+    "user_history.pdf",
+  );
+
 export const logoutUser = () => {
   localStorage.removeItem("authToken");
   localStorage.removeItem("userEmail");
