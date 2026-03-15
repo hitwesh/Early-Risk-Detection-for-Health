@@ -6,6 +6,11 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 4:14am (Added by Debadrita)
+
+### Changed
+
+- Replaced the generic dashboard with new User Panel and Admin Panel views, updating navigation and routes accordingly.
 
 ## 2026-03-15 3:51am (Added by Debadrita)
 
