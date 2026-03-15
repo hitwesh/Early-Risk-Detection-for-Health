@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { buildApiUrl } from "../services/api.js";
+import { buildAuthHeaders } from "../services/auth.js";
 import CustomDropdown from "../components/CustomDropdown.jsx";
 
 const Diagnosis = () => {
@@ -72,21 +73,6 @@ const Diagnosis = () => {
       sessionStorage.removeItem("diagnosisSymptoms");
     }
 
-    const historyEntry = {
-      symptoms: data?.positive_symptoms?.length
-        ? data.positive_symptoms
-        : ["Risk factor intake"],
-      topPrediction: getTopPrediction(finalResult),
-      timestamp: new Date().toISOString(),
-    };
-    const existingHistory = JSON.parse(
-      localStorage.getItem("diagnosisHistory") || "[]",
-    );
-    localStorage.setItem(
-      "diagnosisHistory",
-      JSON.stringify([historyEntry, ...existingHistory].slice(0, 10)),
-    );
-
     navigate("/results");
   };
 
@@ -122,6 +108,7 @@ const Diagnosis = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...buildAuthHeaders(),
         },
         body: JSON.stringify(payload),
       });
@@ -153,6 +140,7 @@ const Diagnosis = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...buildAuthHeaders(),
         },
         body: JSON.stringify({
           session_id: sessionId,

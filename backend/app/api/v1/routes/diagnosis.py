@@ -1,10 +1,14 @@
 import time
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
+from sqlalchemy.orm import Session
 
 from app.ai.diagnosis_engine import normalize_symptom, predict_from_vector, run_diagnosis
 from app.ai.model_loader import get_model
+from app.core.security import get_optional_user
+from app.db.deps import get_db
+from app.models.user import User
 from app.schemas.diagnosis_schema import (
 	DiagnosisAnswerRequest,
 	DiagnosisAnswerResponse,
@@ -12,6 +16,7 @@ from app.schemas.diagnosis_schema import (
 	DiagnosisResponse,
 	DiagnosisStartRequest,
 )
+from app.services.diagnosis_service import create_history_for_user
 from app.services.diagnosis_session import (
 	CONFIDENCE_STOP,
 	MAX_QUESTIONS,
@@ -28,7 +33,11 @@ router = APIRouter(prefix="/diagnosis", tags=["Diagnosis"])
 
 
 @router.post("/predict", response_model=DiagnosisResponse)
-def predict_disease(data: DiagnosisRequest):
+def predict_disease(
+	data: DiagnosisRequest,
+	current_user: User | None = Depends(get_optional_user),
+	db: Session = Depends(get_db),
+):
 	if len(data.symptoms) == 0:
 		raise HTTPException(status_code=400, detail="At least one symptom must be provided")
 	normalized_symptoms = [normalize_symptom(symptom) for symptom in data.symptoms]
@@ -36,6 +45,8 @@ def predict_disease(data: DiagnosisRequest):
 		symptoms=normalized_symptoms,
 		risk_factors=data.dict(),
 	)
+	if current_user is not None:
+		create_history_for_user(db, current_user.id, normalized_symptoms, result)
 
 	return result
 
@@ -79,7 +90,11 @@ def start_diagnosis(payload: DiagnosisStartRequest | None = None):
 
 
 @router.post("/answer", response_model=DiagnosisAnswerResponse)
-def answer_question(req: DiagnosisAnswerRequest):
+def answer_question(
+	req: DiagnosisAnswerRequest,
+	current_user: User | None = Depends(get_optional_user),
+	db: Session = Depends(get_db),
+):
 	artifacts = get_model()
 	session = get_session(req.session_id)
 	if session is None:
@@ -98,6 +113,13 @@ def answer_question(req: DiagnosisAnswerRequest):
 	prediction = predict_from_vector(session["vector"], session["risk_factors"])
 	max_probability = max(prediction["probabilities"]) if prediction["probabilities"] else 0.0
 	if is_session_finished(session, len(artifacts.symptom_names), max_probability=max_probability):
+		if current_user is not None:
+			create_history_for_user(
+				db,
+				current_user.id,
+				session["positive_symptoms"],
+				prediction,
+			)
 		return {
 			"finished": True,
 			"step": session["questions_asked"],
@@ -110,6 +132,13 @@ def answer_question(req: DiagnosisAnswerRequest):
 
 	idx, symptom, engine = get_next_symptom(session, artifacts.symptom_names)
 	if symptom is None:
+		if current_user is not None:
+			create_history_for_user(
+				db,
+				current_user.id,
+				session["positive_symptoms"],
+				prediction,
+			)
 		return {
 			"finished": True,
 			"step": session["questions_asked"],

@@ -42,6 +42,33 @@ export const registerUser = async (userData) => {
 
 export const getToken = () => localStorage.getItem("authToken");
 
+export const buildAuthHeaders = () => {
+  const token = getToken();
+  if (!token) {
+    return {};
+  }
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+};
+
+export const getUserHistory = async () => {
+  const response = await fetch(buildApiUrl("/users/me/history"), {
+    headers: {
+      "Content-Type": "application/json",
+      ...buildAuthHeaders(),
+    },
+  });
+
+  if (!response.ok) {
+    const error = new Error("Unable to load diagnosis history.");
+    error.status = response.status;
+    throw error;
+  }
+
+  return response.json();
+};
+
 export const logoutUser = () => {
   localStorage.removeItem("authToken");
   localStorage.removeItem("userEmail");

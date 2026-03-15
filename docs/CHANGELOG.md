@@ -6,6 +6,20 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 12:52pm (Added by Hitesh)
+
+### Changed
+
+- Added auth headers to diagnosis requests and redirected unauthenticated users to login before loading the user dashboard.
+
+### Changed
+
+- Fixed backend circular import by moving model registration into app startup before metadata creation.
+
+### Changed
+
+- Persisted diagnosis history in the backend and connected the User Panel to the RBAC-protected history endpoint.
+
 ## 2026-03-15 12:32pm (Added by Hitesh)
 
 ### Changed

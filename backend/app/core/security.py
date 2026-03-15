@@ -16,6 +16,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_optional_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False)
 
 
 def hash_password(password: str):
@@ -55,5 +56,28 @@ def get_current_user(
 	user = db.query(User).filter(User.id == user_id).first()
 	if user is None:
 		raise HTTPException(status_code=401, detail="User not found")
+
+	return user
+
+
+def get_optional_user(
+	token: str | None = Depends(oauth2_optional_scheme),
+	db: Session = Depends(get_db),
+):
+	if token is None:
+		return None
+
+	try:
+		payload = decode_token(token)
+	except HTTPException:
+		return None
+
+	user_id = payload.get("user_id")
+	if user_id is None:
+		return None
+
+	user = db.query(User).filter(User.id == user_id).first()
+	if user is None:
+		return None
 
 	return user

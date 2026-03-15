@@ -22,6 +22,8 @@ from app.middleware.security_headers import add_security_headers
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
+    from app.models import diagnosis, user  # noqa: F401
+
     Base.metadata.create_all(bind=engine)
     logger.info("Backend server started")
     yield

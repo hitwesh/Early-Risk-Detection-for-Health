@@ -64,3 +64,13 @@ class DiagnosisAnswerResponse(BaseModel):
 	predictions: Optional[DiagnosisResponse] = None
 	positive_symptoms: Optional[list[str]] = None
 	elapsed_seconds: Optional[float] = None
+
+
+class DiagnosisHistoryOut(BaseModel):
+	id: int
+	symptoms: list[str]
+	top_prediction: str
+	diseases: list[str]
+	probabilities: list[float]
+	risk_factors: Optional[list[str]] = None
+	created_at: str

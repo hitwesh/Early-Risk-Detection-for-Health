@@ -1,18 +1,43 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getToken, getUserHistory, logoutUser } from "../services/auth.js";
 
 const UserPanel = () => {
   const [history, setHistory] = useState([]);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const storedHistory = localStorage.getItem("diagnosisHistory");
-    if (storedHistory) {
-      try {
-        setHistory(JSON.parse(storedHistory));
-      } catch (error) {
-        setHistory([]);
+    const loadHistory = async () => {
+      if (!getToken()) {
+        setError("Login required to view your history.");
+        setIsLoading(false);
+        navigate("/login");
+        return;
       }
-    }
-  }, []);
+
+      setIsLoading(true);
+      setError("");
+      try {
+        const data = await getUserHistory();
+        setHistory(Array.isArray(data) ? data : []);
+      } catch (err) {
+        if (err?.status === 401) {
+          logoutUser();
+          setError("Login required to view your history.");
+          navigate("/login");
+          return;
+        }
+        setError("Unable to load diagnosis history.");
+        setHistory([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadHistory();
+  }, [navigate]);
 
   const latestEntry = history[0];
   const totalDiagnoses = history.length;
@@ -36,7 +61,7 @@ const UserPanel = () => {
               Total Diagnoses
             </p>
             <p className="mt-3 text-2xl font-semibold text-slate-900">
-              {totalDiagnoses}
+              {isLoading ? "--" : totalDiagnoses}
             </p>
           </div>
           <div className="rounded-xl border border-white/30 bg-white/60 p-6 shadow-xl backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
@@ -45,7 +70,7 @@ const UserPanel = () => {
             </p>
             <p className="mt-3 text-sm text-slate-700">
               {latestEntry
-                ? new Date(latestEntry.timestamp).toLocaleString()
+                ? new Date(latestEntry.created_at).toLocaleString()
                 : "No records yet"}
             </p>
           </div>
@@ -54,7 +79,7 @@ const UserPanel = () => {
               Top Predicted Condition
             </p>
             <p className="mt-3 text-sm text-slate-700">
-              {latestEntry?.topPrediction ?? "No predictions"}
+              {latestEntry?.top_prediction ?? "No predictions"}
             </p>
           </div>
         </div>
@@ -64,21 +89,23 @@ const UserPanel = () => {
             <h2 className="text-lg font-semibold text-slate-900">
               Recent Diagnoses
             </h2>
-            {history.length > 0 ? (
+            {error ? (
+              <p className="mt-3 text-sm text-rose-600">{error}</p>
+            ) : history.length > 0 ? (
               <div className="mt-4 space-y-4">
                 {history.slice(0, 4).map((entry, index) => (
                   <div
-                    key={`${entry.timestamp}-${index}`}
+                    key={`${entry.created_at}-${index}`}
                     className="rounded-xl border border-white/30 bg-white/60 p-4 text-sm shadow-md backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-2xl"
                   >
                     <p className="text-xs uppercase tracking-widest text-rose-500">
-                      {new Date(entry.timestamp).toLocaleString()}
+                      {new Date(entry.created_at).toLocaleString()}
                     </p>
                     <p className="mt-2 text-slate-700">
                       Symptoms: {entry.symptoms.join(", ")}
                     </p>
                     <p className="mt-1 font-medium text-slate-900">
-                      Top prediction: {entry.topPrediction}
+                      Top prediction: {entry.top_prediction}
                     </p>
                   </div>
                 ))}
