@@ -7,7 +7,7 @@ class Settings(BaseSettings):
 
 	DATABASE_URL: str
 	MODEL_PATH: str
-	JWT_SECRET: str
+	JWT_SECRET: str = "supersecretkey"
 	JWT_ALGORITHM: str = "HS256"
 	ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 

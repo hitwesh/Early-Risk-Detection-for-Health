@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 12:24pm (Added by Hitesh)
+
+### Changed
+
+- Added a default JWT secret in backend settings to prevent startup validation failures when JWT_SECRET is missing.
+
 ## 2026-03-15 11:56am (Added by Hitesh)
 
 ### Added
