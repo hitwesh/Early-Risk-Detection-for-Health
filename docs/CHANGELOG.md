@@ -6,6 +6,60 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 (Added by Tamoghno)
+
+### Changed
+
+- Optimized backend Dockerfile with multi-stage build and minimal source copy.
+
+## 2026-03-15 (Added by Tamoghno)
+
+### Changed
+
+- Optimized backend Dockerfile with multi-stage build and minimal source copy.
+
+## 2026-03-15 (Added by Tamoghno)
+
+### Changed
+
+- Expanded backend .dockerignore to exclude build outputs, coverage, and env files.
+
+## 2026-03-15 (Added by Tamoghno)
+
+### Changed
+
+- Expanded backend .dockerignore to exclude build outputs, coverage, and env files.
+
+## 2026-03-15 (Added by Tamoghno)
+
+### Added
+
+- Added backend .dockerignore to reduce Docker build context size.
+
+## 2026-03-15 (Added by Tamoghno)
+
+### Changed
+
+- Removed obsolete docker-compose version field to silence compose warnings.
+
+## 2026-03-15 (Added by Tamoghno)
+
+### Changed
+
+- Removed obsolete docker-compose version field to silence compose warnings.
+
+## 2026-03-15 (Added by Tamoghno)
+
+### Added
+
+- Added backend Dockerfile and root docker-compose for containerized runs.
+- Added deployment guide with Docker build/run steps.
+
+### Changed
+
+- Updated backend .env with JWT defaults for container configuration.
+- Updated .gitignore to exclude local database files and pytest cache.
+
 ## 2026-03-15 02:16am (Added by Tamoghno)
 
 ### Changed
