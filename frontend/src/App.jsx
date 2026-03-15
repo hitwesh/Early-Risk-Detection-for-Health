@@ -3,7 +3,8 @@ import Navbar from "./components/Navbar.jsx";
 import Landing from "./pages/Landing.jsx";
 import Diagnosis from "./pages/Diagnosis.jsx";
 import Results from "./pages/Results.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
+import UserPanel from "./pages/UserPanel.jsx";
+import AdminPanel from "./pages/AdminPanel.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 
@@ -18,7 +19,8 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/diagnosis" element={<Diagnosis />} />
           <Route path="/results" element={<Results />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/user" element={<UserPanel />} />
+          <Route path="/admin" element={<AdminPanel />} />
         </Routes>
       </main>
     </div>

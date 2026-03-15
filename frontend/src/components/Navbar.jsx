@@ -26,8 +26,11 @@ const Navbar = () => {
           <NavLink className={baseClass} to="/diagnosis">
             Diagnosis
           </NavLink>
-          <NavLink className={baseClass} to="/dashboard">
-            Dashboard
+          <NavLink className={baseClass} to="/user">
+            User Panel
+          </NavLink>
+          <NavLink className={baseClass} to="/admin">
+            Admin
           </NavLink>
         </div>
         <div className="flex items-center gap-2">
