@@ -6,6 +6,20 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 03:07pm (Added by Hitesh)
+
+### Changed
+
+- Added LinkedIn profile links for team members in the footer.
+
+### Changed
+
+- Replaced the footer with a professional multi-column layout including team details and the GitHub repository link.
+
+### Changed
+
+- Added a professional footer with a copyright notice to the frontend layout.
+
 ## 2026-03-15 02:47pm (Added by Hitesh)
 
 ### Changed
