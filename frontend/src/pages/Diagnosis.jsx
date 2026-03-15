@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { buildApiUrl } from "../services/api.js";
-import { buildAuthHeaders } from "../services/auth.js";
+import { buildAuthHeaders, getToken } from "../services/auth.js";
 import CustomDropdown from "../components/CustomDropdown.jsx";
 
 const Diagnosis = () => {
@@ -28,6 +28,12 @@ const Diagnosis = () => {
   const [sessionId, setSessionId] = useState(null);
   const [currentSymptom, setCurrentSymptom] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!getToken()) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const handleChange = (field) => (event) => {
     setFormValues((prev) => ({ ...prev, [field]: event.target.value }));

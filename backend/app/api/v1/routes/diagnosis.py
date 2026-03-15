@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.ai.diagnosis_engine import normalize_symptom, predict_from_vector, run_diagnosis
 from app.ai.model_loader import get_model
-from app.core.security import get_current_user, get_optional_user
+from app.core.security import get_current_user
 from app.db.deps import get_db
 from app.models.user import User
 from app.schemas.diagnosis_schema import (
@@ -43,7 +43,7 @@ router = APIRouter(prefix="/diagnosis", tags=["Diagnosis"])
 @router.post("/predict", response_model=DiagnosisResponse)
 def predict_disease(
 	data: DiagnosisRequest,
-	current_user: User | None = Depends(get_optional_user),
+	current_user: User = Depends(get_current_user),
 	db: Session = Depends(get_db),
 ):
 	if len(data.symptoms) == 0:
@@ -53,15 +53,17 @@ def predict_disease(
 		symptoms=normalized_symptoms,
 		risk_factors=data.dict(),
 	)
-	if current_user is not None:
-		record = create_history_for_user(db, current_user.id, normalized_symptoms, result)
-		result["history_id"] = record.id
+	record = create_history_for_user(db, current_user.id, normalized_symptoms, result)
+	result["history_id"] = record.id
 
 	return result
 
 
 @router.post("/start")
-def start_diagnosis(payload: DiagnosisStartRequest | None = None):
+def start_diagnosis(
+	payload: DiagnosisStartRequest | None = None,
+	current_user: User = Depends(get_current_user),
+):
 	artifacts = get_model()
 	risk_factors = {}
 	use_bayes_engine = True
@@ -101,7 +103,7 @@ def start_diagnosis(payload: DiagnosisStartRequest | None = None):
 @router.post("/answer", response_model=DiagnosisAnswerResponse)
 def answer_question(
 	req: DiagnosisAnswerRequest,
-	current_user: User | None = Depends(get_optional_user),
+	current_user: User = Depends(get_current_user),
 	db: Session = Depends(get_db),
 ):
 	artifacts = get_model()
@@ -122,15 +124,12 @@ def answer_question(
 	prediction = predict_from_vector(session["vector"], session["risk_factors"])
 	max_probability = max(prediction["probabilities"]) if prediction["probabilities"] else 0.0
 	if is_session_finished(session, len(artifacts.symptom_names), max_probability=max_probability):
-		history_id = None
-		if current_user is not None:
-			record = create_history_for_user(
-				db,
-				current_user.id,
-				session["positive_symptoms"],
-				prediction,
-			)
-			history_id = record.id
+		record = create_history_for_user(
+			db,
+			current_user.id,
+			session["positive_symptoms"],
+			prediction,
+		)
 		return {
 			"finished": True,
 			"step": session["questions_asked"],
@@ -139,20 +138,17 @@ def answer_question(
 			"predictions": prediction,
 			"positive_symptoms": session["positive_symptoms"],
 			"elapsed_seconds": time.time() - session["started_at"],
-			"history_id": history_id,
+			"history_id": record.id,
 		}
 
 	idx, symptom, engine = get_next_symptom(session, artifacts.symptom_names)
 	if symptom is None:
-		history_id = None
-		if current_user is not None:
-			record = create_history_for_user(
-				db,
-				current_user.id,
-				session["positive_symptoms"],
-				prediction,
-			)
-			history_id = record.id
+		record = create_history_for_user(
+			db,
+			current_user.id,
+			session["positive_symptoms"],
+			prediction,
+		)
 		return {
 			"finished": True,
 			"step": session["questions_asked"],
@@ -161,7 +157,7 @@ def answer_question(
 			"predictions": prediction,
 			"positive_symptoms": session["positive_symptoms"],
 			"elapsed_seconds": time.time() - session["started_at"],
-			"history_id": history_id,
+			"history_id": record.id,
 		}
 
 	question = f"Do you have {symptom.replace('_', ' ')}?"
@@ -179,7 +175,10 @@ def answer_question(
 
 
 @router.get("/result", response_model=DiagnosisResponse)
-def get_result(session_id: str):
+def get_result(
+	session_id: str,
+	current_user: User = Depends(get_current_user),
+):
 	session = get_session(session_id)
 	if session is None:
 		raise HTTPException(status_code=404, detail="Session not found")

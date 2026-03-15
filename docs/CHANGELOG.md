@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 02:05pm (Added by Hitesh)
+
+### Changed
+
+- Required authentication for diagnosis endpoints and redirected unauthenticated users away from the diagnosis page.
+
 ## 2026-03-15 02:00pm (Added by Hitesh)
 
 ### Changed
