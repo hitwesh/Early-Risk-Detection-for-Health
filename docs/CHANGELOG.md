@@ -6,6 +6,12 @@
 - Thoroughly explain about your features and changes committed.
 - Always add changes on the top of previous changes, do not break this.
 
+## 2026-03-15 02:47pm (Added by Hitesh)
+
+### Changed
+
+- Added a conditional pregnancy option that appears only for adult female patients and forces false for minors.
+
 ## 2026-03-15 02:40pm (Added by Hitesh)
 
 ### Changed

@@ -17,6 +17,7 @@ const Diagnosis = () => {
     alcohol: "no",
     familyHeartDisease: "no",
     recentInfection: "no",
+    pregnancy: "no",
     chronicDisease: "no",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,6 +35,16 @@ const Diagnosis = () => {
       navigate("/login");
     }
   }, [navigate]);
+
+  const ageValue = Number(formValues.age);
+  const isAdult = Number.isFinite(ageValue) ? ageValue >= 18 : false;
+  const showPregnancy = formValues.sex === "female" && isAdult;
+
+  useEffect(() => {
+    if (!showPregnancy && formValues.pregnancy !== "no") {
+      setFormValues((prev) => ({ ...prev, pregnancy: "no" }));
+    }
+  }, [showPregnancy, formValues.pregnancy]);
 
   const handleChange = (field) => (event) => {
     setFormValues((prev) => ({ ...prev, [field]: event.target.value }));
@@ -113,6 +124,7 @@ const Diagnosis = () => {
         alcohol: formValues.alcohol === "yes",
         family_heart_disease: formValues.familyHeartDisease === "yes",
         recent_infection: formValues.recentInfection === "yes",
+        pregnancy: showPregnancy ? formValues.pregnancy === "yes" : false,
         chronic_disease: formValues.chronicDisease === "yes",
       };
 
@@ -350,6 +362,9 @@ const Diagnosis = () => {
                 { key: "alcohol", label: "Alcohol use" },
                 { key: "familyHeartDisease", label: "Family heart disease" },
                 { key: "recentInfection", label: "Recent infection" },
+                ...(showPregnancy
+                  ? [{ key: "pregnancy", label: "Pregnancy" }]
+                  : []),
                 { key: "chronicDisease", label: "Chronic disease history" },
               ].map((field) => (
                 <div
